@@ -14,8 +14,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    
-    # Configura el puerto dinámico
+
     port = os.getenv('PORT', '8000')  # Usa el puerto proporcionado por Render o el 8000 por defecto
     execute_from_command_line(['manage.py', 'runserver', f'0.0.0.0:{port}'])
 
