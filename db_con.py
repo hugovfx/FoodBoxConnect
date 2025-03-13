@@ -1,6 +1,6 @@
 import pymongo
 
-url = 'mongodb+srv://hugobaeza:ykh55NBxdaFzFhgc@cluster0.mp0jt.mongodb.net/'
+url = 'API_KEY_MONGODB'
 
 client = pymongo.MongoClient(url)
 db = client['foodboxconnect']
