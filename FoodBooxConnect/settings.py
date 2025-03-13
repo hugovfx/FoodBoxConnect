@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-m=vh#!fd!9u-9sl9a9q0)t)7pdsrrt*apsp-4d8zkfsrw5uwh8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['foodboxconnect.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
