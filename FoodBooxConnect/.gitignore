@@ -1,1 +1,16 @@
+# Ignorar archivos de entorno
 .env
+
+# Ignorar archivos de base de datos de Django
+db.sqlite3
+
+# Ignorar carpetas de dependencias de Python
+venv/
+__pycache__/
+
+# Ignorar archivos de compilación de Python
+*.pyc
+*.pyo
+
+# Otros archivos que quieras ignorar
+*.log
