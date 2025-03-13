@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inicia{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- FontAwesome -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/boubles.css' %}">
+    {% block links %}
+    {% endblock %}
+</head>
+<body>
+    <div class="bubbles-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="bubbles">
+            <div class="bubble" style="width: 20px; height: 20px; left: 10%; animation-duration: 6s;"></div>
+            <div class="bubble" style="width: 30px; height: 30px; left: 40%; animation-duration: 8s;"></div>
+            <div class="bubble" style="width: 25px; height: 25px; left: 70%; animation-duration: 5s;"></div>
+            <div class="bubble" style="width: 35px; height: 35px; left: 30%; animation-duration: 9s;"></div>
+            <div class="bubble" style="width: 15px; height: 15px; left: 20%; animation-duration: 7s;"></div>
+            <div class="bubble" style="width: 30px; height: 30px; left: 60%; animation-duration: 8s;"></div>
+            <div class="bubble" style="width: 25px; height: 25px; left: 80%; animation-duration: 6s;"></div>
+        </div>
+        <div style="width: 100%; display: flex; flex-direction: row; justify-content: center;">
+            <input type="search" placeholder="Buscar pedido.." style="width: 20%; border-bottom: 2px solid black; border-top: 0; border-left: 0; border-right: 0; margin-right: 8px;">
+            <button style="height: 50px; width: 3%; background-color: rgba(87, 87, 255, 0.738); border: 0; font-size: 18px; color: white;"><i class="fas fa-search"></i></button>
+        </div>
+        
+        <model-viewer class="fade-in-element" alt="box" src="https://cdn.glitch.me/5b21573e-ca11-43d9-b877-c30987a9986f/boxfood.glb?v=1741806835094" ar  shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <img src="assets/images/logo.png" alt="" style=" position: absolute; width: 90px; left: 5%;">
+        <ul style="margin-right: 10%;">
+            <li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'users' %}">Usuarios</a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="bottom-section">
+        
+    </div>
+    
+    <script src="{% static 'js/boubles.js' %}"></script>
+</body>
+</html>

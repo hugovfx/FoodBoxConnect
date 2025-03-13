@@ -1,0 +1,81 @@
+{% extends 'home.html' %}
+
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Users Panel{% endblock %}
+
+{% block content %}
+<h1>Usuarios Registrados</h1>
+{% if user %}
+    <p>Bienvenido, {{ user.name }} ({{ user.role }})</p>
+{% else %}
+    <p>Inicia sesión</p>
+{% endif %}
+
+<table id="usuarios-table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="usuarios-body">
+        {% for usuario in usuarios %}
+            <tr>
+                <form method="POST" action="{% url 'editar_usuario' usuario.email %}">
+                    {% csrf_token %}
+                    <td><input type="text" name="name" value="{{ usuario.name }}"></td>
+                    <td><input type="text" name="lastname" value="{{ usuario.lastname }}"></td>
+                    <td><input type="text" name="phone" value="{{ usuario.phone }}"></td>
+                    <td><input type="text" name="address" value="{{ usuario.address }}"></td>
+                    <td>{{ usuario.email }}</td> <!-- No editable -->
+                    <td>
+                        <select name="role">
+                            <option value="cliente" {% if usuario.role == "cliente" %}selected{% endif %}>Cliente</option>
+                            <option value="restaurante" {% if usuario.role == "restaurante" %}selected{% endif %}>Restaurante</option>
+                            <option value="elmarro" {% if usuario.role == "elmarro" %}selected{% endif %}>Admin</option>
+                        </select>
+                    </td>
+                    <td class="row">
+                        <button class="users_submit" type="submit" onclick="return confirmarGuardado()">
+                            <i style="color: rgb(104, 74, 109);" class="fas fa-save"></i>
+                        </button>
+                        <a class="users_submit" href="{% url 'eliminar_usuario' usuario.email %}" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">
+                            <i style="color: rgb(181, 48, 48);" class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </form>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <!-- 
+    <tr style="background-color: black;">
+            <td style="padding: 0px;">
+                <button onclick="changePage(-1)" id="prev-page">«</button>
+                <span id="page-info"></span>
+                <button onclick="changePage(1)" id="next-page">»</button>
+            </td>
+        </tr>
+        -->
+</table>
+
+<!-- Paginación -->
+<div class="pagination">
+    <button onclick="changePage(-1)" id="prev-page">« Anterior</button>
+    <span id="page-info"></span>
+    <button onclick="changePage(1)" id="next-page">Siguiente »</button>
+</div>
+
+<!-- Script para la paginación -->
+<script src="{% static 'js/users_list.js' %}"></script>
+{% endblock %}

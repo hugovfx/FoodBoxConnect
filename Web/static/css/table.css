@@ -1,0 +1,96 @@
+/* Estilo general de la tabla */
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+td {
+    color: white;
+}
+
+input {
+    background-color: #1a1a1a00;
+    color: white;
+    border: 0px;
+    text-align: center;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+}
+
+th {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+#usuarios-table tbody tr:nth-child(even) {
+    background-color: #404040;
+}
+
+#usuarios-table tbody tr:nth-child(odd) {
+    background-color: #2b2a2a;
+}
+
+/* Estilo del select */
+select {
+    background-color: #1a1a1a00;
+    color: white;
+    border: 2px solid #533a58;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 15px;
+    text-align: center;
+    appearance: none;
+}
+
+select:focus {
+    outline: none;
+    border-color: #7a527a;
+}
+
+option {
+    background-color: #2b2a2a;
+    color: white;
+}
+
+/* Paginación */
+.pagination {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.pagination button {
+    background-color: rgb(68, 46, 72);
+    color: white;   
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.pagination button:disabled {
+    background-color: #876a88;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.users_submit {
+    border: 0px;
+    background-color: #1a1a1a00;
+    color: white;
+    font-size: 20px;
+}
