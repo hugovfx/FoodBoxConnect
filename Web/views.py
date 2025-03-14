@@ -327,4 +327,7 @@ from django.http import JsonResponse
 def api_hello(request):
     return JsonResponse({'message': 'Hola, Django API funcionando correctamente'})
 
-
+def api_get_user(request):
+    usuarios = users_collection.find()  
+    usuarios_info = [{"name": usuario["name"], "lastname": usuario["lastname"]} for usuario in usuarios]
+    return JsonResponse(usuarios_info);
