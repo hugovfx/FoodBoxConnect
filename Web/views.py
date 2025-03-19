@@ -35,11 +35,6 @@ def home(request):
 
     return render(request, "home.html", {"user": user,"message":message})
 
-
-
-
-
-
 #-------------------------------- RUTA ORDER --------------------------------#
 from bson import ObjectId
 
@@ -59,9 +54,8 @@ def order(request, order_key):
     if not box:
         return redirect("home")
 
-    # Obtener todas las cajas del mismo dueño
-    boxes = list(boxes_collection.find({"id_owner": ObjectId(box['id_owner'])}))  # Convertir a lista
-    boxNum = len(boxes)  # Contar elementos en la lista
+    boxes = list(boxes_collection.find({"id_owner": ObjectId(box['id_owner'])})) 
+    boxNum = len(boxes) 
 
     boxes_info = [
         {"position": b["position"]} 
@@ -72,21 +66,9 @@ def order(request, order_key):
         "user": user,
         "order": order,
         "box": box,
-        "boxes": boxes_info,  # Pasar la lista de cajas
+        "boxes": boxes_info, 
         "boxNum": boxNum
     })
-
-
-
-
-
-
-
-
-
-
-
-
 
 def login_view(request):
     return render(request, "login.html")

@@ -19,37 +19,105 @@
         <p><strong>Estado:</strong> {{ order.state }}</p>
         <p><strong>Temperatura:</strong> {{ order.temperature }}°C</p>
         <p><strong>Fecha de pedido:</strong> {{ order.dateTime }}</p>
-        <p><strong>Hora de recogida:</strong> {{ order.pick_time }}</p>
+        <p><strong>Detalles: </strong>{{ order.details }}</p>
         <h3>Codigo de apertura: {{ box.key }}</h3>
         <h3>Contenedor: {{ box.position }}</h3>
-        
       </div>
     </div>
     <hr>
     <div class="rigth">
-      <!-- Mostrar el número de cajas -->
-    <h2>
-      {% if boxNum > 1 %}
-        {{ boxNum }} Cajas
-      {% else %}
-      {{ boxNum }} Caja
-      {% endif %}
-    </h2>
-    
-    <!-- Crear un div para cada caja según boxNum -->
-    <div class="boxes">
-      {% for box_item in boxes %}
-        {% if box_item.position == box.position %}
-          <div class="box" style="background-color: rgb(113, 210, 113);">
-            <p>{{ box_item.position }}</p>
+      <!-- Crear un div para cada caja según boxNum -->
+      <div class="boxes">
+        <div>
+          <div class="boxList">
+            {% for box_item in boxes %}
+              {% if box_item.position and box_item.position|slice:":1" == "A" %}
+                {% if box_item.position == box.position %}
+                  <div class="box">
+                    <div class="boxTop"></div>
+                    <div class="boxBottomS">
+                      <p>{{ box_item.position }}</p>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="box">
+                    <div class="boxTop"></div>
+                    <div class="boxBottom">
+                      <p>{{ box_item.position }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
           </div>
-        {% else %}
-          <div class="box">
-            <p>{{ box_item.position }}</p>
+  
+          <div class="boxList">
+            {% for box_item in boxes %}
+              {% if box_item.position and box_item.position|slice:":1" == "B" %}
+                {% if box_item.position == box.position %}
+                  <div class="box">
+                    <div class="boxTop"></div>
+                    <div class="boxBottomS">
+                    <p>{{ box_item.position }}</p>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="box">
+                  <div class="boxTop"></div>
+                  <div class="boxBottom">
+                    <p>{{ box_item.position }}</p>
+                  </div>
+                </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
           </div>
-        {% endif %}
-      {% endfor %}
-    </div>
+
+          <div class="boxList">
+            {% for box_item in boxes %}
+              {% if box_item.position and box_item.position|slice:":1" == "C" %}
+              {% if box_item.position == box.position %}
+                <div class="box">
+                  <div class="boxTop"></div>
+                  <div class="boxBottomS">
+                    <p>{{ box_item.position }}</p>
+                  </div>
+                </div>
+              {% else %}
+                <div class="box">
+                  <div class="boxTop"></div>
+                  <div class="boxBottom">
+                    <p>{{ box_item.position }}</p>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          </div>
+
+          <div class="boxList">
+            {% for box_item in boxes %}
+              {% if box_item.position and box_item.position|slice:":1" == "D" %}
+                {% if box_item.position == box.position %}
+                  <div class="box">
+                    <div class="boxTop"></div>
+                    <div class="boxBottomS">
+                      <p>{{ box_item.position }}</p>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="box">
+                    <div class="boxTop"></div>
+                    <div class="boxBottom">
+                      <p>{{ box_item.position }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
