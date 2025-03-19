@@ -3,14 +3,89 @@ from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth.hashers import make_password, check_password
 import random
+from django.core import signing
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+
+#-------------------------------- FUNCIONES --------------------------------#
+def randomOrder():
+    valores = "0123456789abcABC"
+    clave = ""
+    for i in range (9):
+        numero = random.randint(0, len(valores)-1)
+        clave += valores[numero]
+    return clave
+
 #-------------------------------- RUTA HOME --------------------------------#
 def home(request):
+    message = ""
     user = request.session.get("user")
-    return render(request, "home.html", {"user": user})
+    if request.method == "POST":
+        order_key = request.POST.get("order_key")
+
+        order = orders_collection.find_one({"order_key": order_key})
+
+        if order:
+            signed_order_key = signing.dumps(order['order_key'])
+            return redirect("order", order_key=signed_order_key)
+        else:
+            message = "Pedido no encontrado."
+
+    return render(request, "home.html", {"user": user,"message":message})
+
+
+
+
+
+
+#-------------------------------- RUTA ORDER --------------------------------#
+from bson import ObjectId
+
+def order(request, order_key):
+    user = request.session.get("user")
+
+    try:
+        original_order_key = signing.loads(order_key)
+    except signing.BadSignature:
+        return redirect("home")
+
+    order = orders_collection.find_one({"order_key": original_order_key})
+    if not order:
+        return redirect("home")
+
+    box = boxes_collection.find_one({"_id": ObjectId(order['id_box'])})
+    if not box:
+        return redirect("home")
+
+    # Obtener todas las cajas del mismo dueño
+    boxes = list(boxes_collection.find({"id_owner": ObjectId(box['id_owner'])}))  # Convertir a lista
+    boxNum = len(boxes)  # Contar elementos en la lista
+
+    boxes_info = [
+        {"position": b["position"]} 
+        for b in boxes_collection.find({"id_owner": ObjectId(box["id_owner"])}, {"position": 1, "_id": 0})
+    ]
+
+    return render(request, "order.html", {
+        "user": user,
+        "order": order,
+        "box": box,
+        "boxes": boxes_info,  # Pasar la lista de cajas
+        "boxNum": boxNum
+    })
+
+
+
+
+
+
+
+
+
+
+
 
 
 def login_view(request):
@@ -53,6 +128,7 @@ def register(request):
 
     return render(request, "register.html")
 
+#-------------------------------- RUTA INICIAR_SESION --------------------------------#
 def iniciar_sesion(request):
     user = request.session.get("user")
 
@@ -319,8 +395,6 @@ def admin_panel(request):
 
 
 
-
-
 #---------------------------------------API-----------------------------------------#
 from django.http import JsonResponse
 
@@ -331,3 +405,19 @@ def api_get_user(request):
     usuarios = users_collection.find()  
     usuarios_info = [{"name": usuario["name"], "lastname": usuario["lastname"]} for usuario in usuarios]
     return JsonResponse(usuarios_info);
+
+def api_search_order(request, orderKey):
+    
+    order = orders_collection.find_one({"order_key": orderKey}) 
+    return render(request, "order.html", {"order":order});
+
+
+
+#-------------------------- Pedido ------------------------------#
+
+
+    
+
+#                       Ejemplo
+def plantilla(request):
+    return render(request, "plantilla.html");

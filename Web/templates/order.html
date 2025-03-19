@@ -1,0 +1,59 @@
+{% extends 'plantilla.html' %}
+
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/order.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+{% endblock %}
+
+{% block title %}Pedido{% endblock %}
+
+{% block main-content %}
+<div class="content">
+  <div class="div-lr">
+    <div class="left">
+      <div class="cardOrder">
+         <!-- Factura -->
+        <h2><i class="fas fa-file-invoice"></i> Pedido: {{ order.order_key }}</h2>
+        <p><strong>Estado:</strong> {{ order.state }}</p>
+        <p><strong>Temperatura:</strong> {{ order.temperature }}°C</p>
+        <p><strong>Fecha de pedido:</strong> {{ order.dateTime }}</p>
+        <p><strong>Hora de recogida:</strong> {{ order.pick_time }}</p>
+        <h3>Codigo de apertura: {{ box.key }}</h3>
+        <h3>Contenedor: {{ box.position }}</h3>
+        
+      </div>
+    </div>
+    <hr>
+    <div class="rigth">
+      <!-- Mostrar el número de cajas -->
+    <h2>
+      {% if boxNum > 1 %}
+        {{ boxNum }} Cajas
+      {% else %}
+      {{ boxNum }} Caja
+      {% endif %}
+    </h2>
+    
+    <!-- Crear un div para cada caja según boxNum -->
+    <div class="boxes">
+      {% for box_item in boxes %}
+        {% if box_item.position == box.position %}
+          <div class="box" style="background-color: rgb(113, 210, 113);">
+            <p>{{ box_item.position }}</p>
+          </div>
+        {% else %}
+          <div class="box">
+            <p>{{ box_item.position }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

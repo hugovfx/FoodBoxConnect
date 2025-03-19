@@ -15,4 +15,6 @@ urlpatterns = [
     path("admin_panel/", views.admin_panel, name="admin_panel"),
     path("eliminar_usuario/<str:email>/", views.eliminar_usuario, name="eliminar_usuario"),
     path("api/hello/", views.api_hello, name="api_hello"),  
+    path("plantilla", views.plantilla, name="plantilla"),
+    path("order/<str:order_key>/", views.order, name="order"),
 ]
