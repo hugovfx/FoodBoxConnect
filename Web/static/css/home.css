@@ -1,9 +1,9 @@
 :root {
-    --primary-color: rgb(42, 14, 72);
-    --secondary-color: rgb(103, 81, 132);
-    --card-color: rgb(193, 175, 218);
-    --cardA-color: rgb(193, 175, 218);
-    --background-color: rgb(198, 174, 231);
+    --primary-color: rgb(76, 78, 203);
+    --secondary-color: rgb(94, 98, 234);
+    --card-color: #869aff95;
+    --cardA-color: rgb(255, 255, 255);
+    --background-color: #dfe7ff;
     --font-family: "Poppins", sans-serif;
 }
 

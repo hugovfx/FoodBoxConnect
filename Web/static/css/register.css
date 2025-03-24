@@ -88,7 +88,7 @@
     width: 90%;
     margin: 4px;
     border-radius: 1rem;
-    background-color: rgb(198, 174, 231);
+    background-color: var(--cardA-color);
     align-items: start;
 }
 
@@ -99,7 +99,7 @@
     width: 40%;
     margin: 4px;
     border-radius: 1rem;
-    background-color: rgb(198, 174, 231);
+    background-color: var(--cardA-color);
     align-items: start; 
 }
 
