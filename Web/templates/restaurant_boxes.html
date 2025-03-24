@@ -2,22 +2,28 @@
 
 {% load static %}
 
+{% block linksR %}
+<link rel="stylesheet" href="{% static 'css/restaurant_boxes.css' %}">
+
+{% endblock %}
+
 {% block contenido %}
 <p>
     {% if not boxes %}
         No hay cajas asociadas.
     {% else %}
-        <p>Cantidad de cajas: {{ boxes|length }}</p>
-
-        <ul>
-            {% for box in boxes %}
-                <li>
-                    <strong>Nombre:</strong> {{ box.name }} <br>
-                    <strong>Modelo:</strong> {{ box.model }} <br>
-                    <strong>Posición:</strong> {{ box.position }}
-                </li>
-            {% endfor %}
-        </ul>
+    <p>Cantidad de cajas: {{ boxes|length }}</p>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+        {% for box in boxes %}
+            <div class="box-card">
+                <div style="width: 200px; height: 40px; background-color: blue;">
+                </div>
+                <strong>Nombre:</strong> {{ box.name }} <br>
+                <strong>Modelo:</strong> {{ box.model }} <br>
+                <strong>Posición:</strong> {{ box.position }}
+            </div>
+        {% endfor %}
+        </div>
     {% endif %}
 </p>
 {% endblock %}

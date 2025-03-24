@@ -1,10 +1,12 @@
 :root {
-    --primary-color: rgb(76, 78, 203);
-    --secondary-color: rgb(94, 98, 234);
-    --card-color: #869aff95;
-    --cardA-color: rgb(255, 255, 255);
-    --background-color: #dfe7ff;
+    --primary-color: #2e3035;
+    --secondary-color: #5e636f;
+    --card-color: #46494e;
+    --cardA-color: #555b63;
+    --background-color: #f2f2f2;
     --font-family: "Poppins", sans-serif;
+    --text-color: white;
+    --div-input-color: rgb(247, 248, 253);
 }
 
 body {

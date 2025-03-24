@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Evitar el desbordamiento lateral */
+    overflow-x: hidden;
 }
 
 /* 📌 Contenedor principal */
@@ -21,17 +21,17 @@ body {
     width: 80%;
     height: 70vh;
     display: flex;
-    background: rgb(239, 220, 248);
+    background: var(--background-color);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box; /* Incluye el padding dentro del ancho */
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.205);
+    box-sizing: border-box; 
 }
 
 /* 📌 Barra lateral */
 .barra-lateral {
     width: 25%;
-    background-color: #3c254f;
+    background-color: var(--card-color);
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -39,7 +39,7 @@ body {
 }
 
 .enlace-navegacion {
-    color: rgb(239, 220, 248);
+    color: var(--text-color);
     text-decoration: none;
     padding: 15px;
     display: flex;
@@ -50,7 +50,7 @@ body {
 }
 
 .enlace-navegacion:hover {
-    background: #533d65;
+    background: var(--cardA-color);
 }
 
 /* 📌 Contenido de administración */

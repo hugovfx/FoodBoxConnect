@@ -13,10 +13,10 @@
     <form class="data" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
         <div class="select-role">
-            <a class="role-cliente">
+            <a class="role-cliente" style="color: white;">
                 Cliente
             </a>
-            <a class="role-restaurant" href="{% url 'restaurant_register' %}">
+            <a class="role-restaurant" style="color: white;" href="{% url 'restaurant_register' %}">
                 Restaurante
             </a>
         </div>
@@ -100,7 +100,7 @@
         {% endif %}
         <button class="submit-button" type="submit">Registrarse</button>
     
-        <p>¿Ya tienes cuenta? <a href="{% url 'login' %}"> Iniciar sesión</a></p>
+        <p style="color: white;"> ¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color: rgb(144, 144, 255); text-decoration: none;"> Iniciar sesión</a></p>
     </form>
 </div>
 <script src="{% static 'js/register.js' %}"></script>
