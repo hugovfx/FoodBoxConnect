@@ -4,7 +4,6 @@
 
 {% block linksR %}
 <link rel="stylesheet" href="{% static 'css/restaurant_boxes.css' %}">
-
 {% endblock %}
 
 {% block contenido %}
@@ -16,11 +15,42 @@
     <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
         {% for box in boxes %}
             <div class="box-card">
-                <div style="width: 200px; height: 40px; background-color: blue;">
+                <div style="display: flex; flex-direction: row; align-items: center;">
+                    <i class="fa-solid fa-wifi icon-wifi"></i>
+                    <p>{{ box.serie }}</p>
                 </div>
-                <strong>Nombre:</strong> {{ box.name }} <br>
-                <strong>Modelo:</strong> {{ box.model }} <br>
-                <strong>Posición:</strong> {{ box.position }}
+                <form action="" method="POST">
+                    <label for="name">Nombre</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box"></i> 
+                        <input type="text" name="name" id="name" value="{{ box.name }}">
+                    </div>
+                    <label for="model">Modelo</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box"></i> 
+                        <input type="text" name="model" id="model" value="{{ box.model }}">
+                    </div>
+                    <label for="box_key">Nip</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box"></i>
+                        <input type="text" name="box_key" id="box_key" value="{{ box.box_key }}">
+                    </div>
+                    <label for="state">Status</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box"></i> 
+                        <input type="text" name="state" id="state" value="{{ box.state }}">
+                    </div>
+                    <label for="position">Posicion</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box input-icon"></i> 
+                        <input type="text" name="position" id="position" value="{{ box.position }}">
+                    </div>
+                    <label for="dateTime">Fecha de registro</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-box input-icon"></i> 
+                        <input type="text" name="position" id="dateTime" value="{{ box.dateTime }}">
+                    </div>
+                </form>
             </div>
         {% endfor %}
         </div>
