@@ -5,7 +5,9 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("login/", views.iniciar_sesion, name="login"),
     path("register/", views.register, name="register"),
+    path("restaurant_register/", views.restaurant_register, name="restaurant_register"),
     path("logout/", views.cerrar_sesion, name="cerrar_sesion"),
+    path("profile/", views.profile, name="profile"),
     path("orders/", views.orders, name="orders"),
     path("users/", views.users_list, name="users"),
     path("users/edit/<str:email>/", views.editar_usuario, name="editar_usuario"),
@@ -17,4 +19,7 @@ urlpatterns = [
     path("api/hello/", views.api_hello, name="api_hello"),  
     path("plantilla", views.plantilla, name="plantilla"),
     path("order/<str:order_key>/", views.order, name="order"),
+    # Restaurantes
+    path("administrar-restaurante/", views.restaurant_panel, name="restaurant_panel"),
+    path("administrar-restaurante/boxes", views.restaurant_boxes, name="restaurant_boxes"),
 ]

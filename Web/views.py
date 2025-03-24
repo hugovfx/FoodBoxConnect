@@ -78,23 +78,26 @@ def register(request):
 
     if user:
         return redirect("home")
-    
+
     if request.method == "POST":
-        restaurant_name = request.POST["restaurant_name"]
         name = request.POST["name"]
         lastname = request.POST["lastname"]
         phone = request.POST["phone"]
         address = request.POST["address"]
         email = request.POST["email"]
         password = request.POST["password"]
-        role = request.POST["role"]
+        role = "cliente"
 
         if users_collection.find_one({"email": email}):
-            return render(request, "register.html", {"error": "Este correo ya está registrado."})
-
-        if role == "restaurante":
-            name = restaurant_name;
-            lastname = "";
+            data = {
+                "name": name,
+                "lastname": lastname,
+                "phone": phone,
+                "address": address,
+                "email": email,
+                "password":password
+            }
+            return render(request, "register.html", {"error": "Este correo ya está registrado.", "data":data})
 
         new_user = {
             "name": name,
@@ -109,6 +112,46 @@ def register(request):
         return redirect("login") 
 
     return render(request, "register.html")
+
+def restaurant_register(request):
+    user = request.session.get("user")
+
+    if user:
+        return redirect("home")
+
+    if request.method == "POST":
+        name = request.POST["name"]
+        cp = request.POST["cp"]
+        phone = request.POST["phone"]
+        address = request.POST["address"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        role = "restaurante"
+
+        if users_collection.find_one({"email": email}):
+            data = {
+                "name": name,
+                "cp": cp,
+                "phone": phone,
+                "address": address,
+                "email": email,
+                "password":password
+            }
+            return render(request, "restaurant_register.html", {"error": "Este correo ya está registrado.", "data":data})
+
+        new_user = {
+            "name": name,
+            "cp": cp,
+            "phone": phone,
+            "address": address,
+            "email": email,
+            "password": make_password(password),
+            "role": role,
+        }
+        users_collection.insert_one(new_user)
+        return redirect("login") 
+
+    return render(request, "restaurant_register.html")
 
 #-------------------------------- RUTA INICIAR_SESION --------------------------------#
 def iniciar_sesion(request):
@@ -142,10 +185,25 @@ def orders(request):
     user = request.session.get("user")
     return render(request, "orders.html", {"user": user});
 
-
+#-------------------------------- RUTA PROFILE --------------------------------#
+def profile(request):
+    user = request.session.get("user")
+    user = users_collection.find_one({"email":user["email"]})
+    return render(request, "profile.html", {"user": user})
 
 #accesos y restricciones 
 #   RESTAURATES
+def restaurant_panel(request):
+    user = request.session.get("user")
+    user = users_collection.find_one({"email":user["email"]})
+    return render(request, "restaurant_panel.html", {"user": user})
+
+def restaurant_boxes(request):
+    user = request.session.get("user")
+    user = users_collection.find_one({"email":user["email"]})
+    boxes = list(boxes_collection.find({"id_owner": ObjectId(user['_id'])}))
+    return render(request, "restaurant_boxes.html", {"user": user, "boxes":boxes})
+
 def pedidos_restaurante(request):
     user = request.session.get("user")
 

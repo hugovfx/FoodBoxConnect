@@ -1,0 +1,25 @@
+{% extends 'plantilla.html' %}
+    
+{% load static %}
+
+{% block title %}Perfil {{user.name}}{% endblock %} 
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="card">
+        <p class="wave">
+            {% for letra in user.name %}<span>{{letra}}</span>{% endfor %}
+        </p>
+        <p>{{user.email}}</p>
+        <p>{{user.phone}}</p>
+        <p>{{user.address}}</p>
+        <a href="{% url 'register' %}">Registra un restaurante</a>
+    </div>
+    
+</div>
+
+{% endblock %}

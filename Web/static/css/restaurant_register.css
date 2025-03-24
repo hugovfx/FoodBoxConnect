@@ -1,0 +1,144 @@
+.data {
+    background-color: var(--card-color);
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.06);
+    padding: 0px 0px 20px 0px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+}
+
+.select-role{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0; 
+    margin-bottom: 10px; 
+    width: 100%; 
+    height: 40px;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem; 
+    background-color: var(--cardA-color);
+}
+
+.role-cliente{
+    width: 60%;
+    height: 40px;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem; 
+    background-color: var(--cardA-color);
+    text-decoration: none;
+    color: black;
+}
+
+.role-restaurant{
+    width: 40%;
+    height: 40px;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem; 
+    background-color: var(--card-color);
+    text-decoration: none;
+    color: black;
+}
+
+.data label {
+    font-weight: 100;
+    font-size: 16px;
+}
+
+.data-input {
+    font-weight: 100;
+    width: calc(100% - 30px);
+    font-size: 12px;
+    padding: 4px 30px 4px 10px;
+    border: 0;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+}
+
+.data-input:focus {
+    outline: none;
+}
+
+.submit-button {
+    width: 94%;
+    border: 0;
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    padding: 10px 0px 10px 0px;
+    color: rgb(198, 174, 231);
+    font-size: 16px;
+    font-weight: 300;
+    margin-top: 8px;
+}
+
+.submit-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.single-div {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px 8px 14px;
+    width: 90%;
+    margin: 4px;
+    border-radius: 1rem;
+    background-color: rgb(198, 174, 231);
+    align-items: start;
+}
+
+.double {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px 8px 14px;
+    width: 40%;
+    margin: 4px;
+    border-radius: 1rem;
+    background-color:rgb(198, 174, 231);
+    align-items: start; 
+}
+
+.double-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 0px;
+}
+
+.row-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+#eyeIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 15px;
+}
+
+i {
+    color: var(--secondary-color);
+    margin-right: 4px;
+}
+
+.error-email{
+    margin: 0;
+}
+
+.error-email p{
+    font-size: 16px;
+    color: rgb(194, 74, 74);
+}

@@ -1,7 +1,5 @@
 
 body{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400; 
     margin: 0;
 }
 
@@ -12,6 +10,7 @@ body{
 
 a {
     font-size: 18px;
+    font-weight: 100 !important; 
 }
 
 .navbar {
@@ -26,8 +25,8 @@ a {
     background: transparent;
     transition: background 0.6s ease, box-shadow 0.6s ease, padding 0.6s ease;
     z-index: 100;
-    padding-bottom: 8vh;
-    padding-top: 8vh;
+    padding-bottom: 6vh;
+    padding-top: 6vh;
     
 }
 
@@ -78,8 +77,8 @@ a {
 }
 
 .bottom-section {
-    background-color: rgba(87, 87, 255, 0.738);
-    color: white;
+    background-color: rgb(42, 14, 72);
+    color: rgb(198, 174, 231);
     padding: 50px 20px;
     text-align: center;
 }

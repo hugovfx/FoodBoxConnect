@@ -1,0 +1,43 @@
+{% extends 'plantilla.html' %}
+
+{% load static %}
+
+{% block title %}
+    Panel de Administración
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/rest_panel.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="contenedor-principal">
+    <div class="panel-administracion">
+        <nav class="barra-lateral">
+            <a class="enlace-navegacion" href="{% url 'restaurant_boxes' %}">
+                <i class="fa-solid fa-boxes-stacked"></i> <strong>Cajas</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="#">
+                <i class="fa-solid fa-boxes-packing"></i> <strong>Dar de alta una caja</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="#">
+                <i class="fa-solid fa-clipboard-list"></i> <strong>Pedidos</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="#">
+                <i class="fa-solid fa-plus-square"></i> <strong>Opción 1</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="#">
+                <i class="fa-solid fa-dolly"></i> <strong>Opción 2</strong>
+            </a>
+        </nav>
+        <main class="contenido-administracion">
+            {% block contenido %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

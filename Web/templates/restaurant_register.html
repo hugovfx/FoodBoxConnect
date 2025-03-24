@@ -1,0 +1,117 @@
+{% extends 'plantilla.html' %}
+    
+{% load static %}
+
+{% block title %}Register{% endblock %} 
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/restaurant_register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <form class="data" action="{% url 'restaurant_register' %}" method="POST">
+        {% csrf_token %}
+        <div class="select-role">
+            <a class="role-cliente" href="{% url 'register' %}">
+                Cliente
+            </a>
+            <a class="role-restaurant" >
+                Restaurante
+            </a>
+        </div>
+        <div class="double-div">
+            <div class="double">
+                <label for="name">Nombre del Restaurante</label>
+                <div class="row-div">
+                    <i class="fa-solid fa-envelope"></i>
+                    {% if error %}
+                    <input placeholder="Nombre" class="data-input" type="text" id="name" name="name" value="{{data.name}}" required>
+
+                    {% else %}
+                    <input placeholder="Nombre" class="data-input" type="text" id="name" name="name" required>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="double">
+                <label for="address">Domicilio</label>
+                <div class="row-div">
+                    <i class="fa-solid fa-house"></i>
+                    {% if error %}
+                    <input placeholder="Domicilio" class="data-input" type="text" id="address" name="address" value="{{data.address}}" required>
+
+                    {% else %}
+                    <input placeholder="Domicilio" class="data-input" type="text" id="address" name="address" required>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="double-div">
+            <div class="double">
+                <label for="phone">Teléfono</label>
+                <div class="row-div">
+                    <i class="fa-solid fa-phone"></i>
+                    {% if error %}
+                    <input placeholder="6141234567" class="data-input" type="text" id="phone" name="phone" value="{{data.phone}}" required> 
+
+                    {% else %}
+                    <input placeholder="6141234567" class="data-input" type="text" id="phone" name="phone" required> 
+                    {% endif %}
+                </div>
+            </div>
+            <div class="double">
+                <label for="cp">Código Postal</label>
+                <div class="row-div">
+                    <i class="fa-solid fa-map-marker-alt"></i>
+                    {% if error %}
+                    <input placeholder="12034" class="data-input" type="text" id="cp" name="cp" value="{{data.cp}}" >
+
+                    {% else %}
+                    <input placeholder="12034" class="data-input" type="text" id="cp" name="cp">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+        <div class="single-div">
+            <label for="email">Email</label>
+            <div class="row-div">
+                <i class="fa-solid fa-user"></i>
+                <input placeholder="email@email.com" class="data-input" type="email" id="email" name="email" required>
+            </div>
+        </div>
+    
+        <div class="single-div">
+            <label for="password">Contraseña</label>
+            <div class="row-div">
+                <i class="fa-solid fa-lock"></i>
+                {% if error %}
+                <input placeholder="********" class="data-input" type="password" id="password" name="password" value="{{data.password}}" required>
+                {% else %}
+                <input placeholder="********" class="data-input" type="password" id="password" name="password" required>
+                {% endif %}
+                <i id="eyeIcon" class="fa-solid fa-eye-slash icono" onclick="togglePassword()"></i>
+            </div>
+        </div>
+        {% if error %}
+            <div class="error-email" id="message-alert">
+                <p>{{ error }}</p>        
+            </div>
+        {% endif %}
+        <button class="submit-button" type="submit">Registrarse</button>
+    
+        <p>¿Ya tienes cuenta? <a href="{% url 'login' %}"> Iniciar sesión</a></p>
+    </form>
+</div>
+<script src="{% static 'js/register.js' %}"></script>
+{% if error %}
+    <script>
+            setTimeout(function() {
+                var alert = document.getElementById("message-alert");
+                if (alert) {
+                    alert.style.display = 'none';
+                }
+            }, 4000);  
+        </script>
+    {% endif %}
+{% endblock %}

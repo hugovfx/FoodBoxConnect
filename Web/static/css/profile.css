@@ -1,0 +1,36 @@
+
+.card{
+    width: 450px;
+    height: 280px;
+    background-color: var(--card-color);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.116);
+}
+
+
+.wave span {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(198, 174, 231);/* Color inicial */
+    animation: wave 1.5s infinite alternate;
+}
+
+/* Retrasos para cada letra */
+.wave span:nth-child(1) { animation-delay: 0s; }
+.wave span:nth-child(2) { animation-delay: 0.2s; }
+.wave span:nth-child(3) { animation-delay: 0.4s; }
+.wave span:nth-child(4) { animation-delay: 0.6s; }
+.wave span:nth-child(5) { animation-delay: 0.8s; }
+.wave span:nth-child(6) { animation-delay: 1.0s; }
+.wave span:nth-child(7) { animation-delay: 1.2s; }
+.wave span:nth-child(8) { animation-delay: 1.4s; }
+.wave span:nth-child(9) { animation-delay: 1.6s; }
+.wave span:nth-child(10) { animation-delay: 1.8s; }
+.wave span:nth-child(11) { animation-delay: 2.0s; }
+.wave span:nth-child(12) { animation-delay: 2.2s; }
+
+@keyframes wave {
+    0% { color: #b6b6b6; } /* Rojo */
+    50% { color: #646464; } /* Verde */
+    100% { color: #242424; } /* Azul */
+}

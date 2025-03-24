@@ -1,16 +1,13 @@
-
-
-.boximg{
-    position: absolute;
-    width: 200px; 
-    height: auto;
+:root {
+    --primary-color: rgb(42, 14, 72);
+    --secondary-color: rgb(103, 81, 132);
+    --card-color: rgb(193, 175, 218);
+    --cardA-color: rgb(193, 175, 218);
+    --background-color: rgb(198, 174, 231);
+    --font-family: "Poppins", sans-serif;
 }
 
-.image-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999; 
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
 }
-

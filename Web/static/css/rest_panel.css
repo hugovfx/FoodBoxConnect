@@ -1,0 +1,106 @@
+/* 📌 Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Evitar el desbordamiento lateral */
+}
+
+/* 📌 Contenedor principal */
+.contenedor-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 100px;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+/* 📌 Panel de administración */
+.panel-administracion {
+    width: 80%;
+    height: 70vh;
+    display: flex;
+    background: rgb(239, 220, 248);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Incluye el padding dentro del ancho */
+}
+
+/* 📌 Barra lateral */
+.barra-lateral {
+    width: 25%;
+    background-color: #3c254f;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.enlace-navegacion {
+    color: rgb(239, 220, 248);
+    text-decoration: none;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.enlace-navegacion:hover {
+    background: #533d65;
+}
+
+/* 📌 Contenido de administración */
+.contenido-administracion {
+    width: 75%;
+    padding: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+hr{
+    display: none;
+}
+
+/* 📌 Diseño responsivo para móviles */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden; /* Evitar el desbordamiento lateral */
+    }
+
+    .contenedor-principal {
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+        margin-top: 100px; 
+    }
+
+    .panel-administracion {
+        width: 100%;  
+        flex-direction: column;
+        height: auto;
+    }
+
+    .barra-lateral {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: space-around;
+    }
+
+    .enlace-navegacion {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .contenido-administracion {
+        width: 100%;
+    }
+    hr{
+        display: block;
+    }
+}
