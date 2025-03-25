@@ -21,5 +21,8 @@ urlpatterns = [
     path("order/<str:order_key>/", views.order, name="order"),
     # Restaurantes
     path("administrar-restaurante/", views.restaurant_panel, name="restaurant_panel"),
+    path("administrar-restaurante/registrar-pedido", views.add_order, name="add_order"),
+    path("administrar-restaurante/pedidos", views.restaurant_orders, name="restaurant_orders"),
     path("administrar-restaurante/boxes", views.restaurant_boxes, name="restaurant_boxes"),
+    path("administrar-restaurante/addBox", views.restaurant_addBox, name="restaurant_addBox"),
 ]

@@ -1,0 +1,80 @@
+{% extends 'restaurant_panel.html' %}
+
+{% load static %}
+
+{% block linksR %}
+<link rel="stylesheet" href="{% static 'css/restaurant_boxes.css' %}">
+{% endblock %}
+
+{% block contenido %}
+  {% if not orders %}
+    No hay cajas asociadas.
+  {% else %}
+    <p>Cantidad de pedidos: {{ orders|length }}</p>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+        {% for order in orders %}
+            <div class="box-card">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <label for="order_key">Orden</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-utensils"></i>
+                        <input type="text" name="order_key" id="order_key" value="{{ order.order_key }}" readonly style="background-color: rgb(240, 240, 240);">
+                    </div>
+
+                    <label for="state">Estado</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-hourglass-half"></i> 
+                        <select id="state" name="state" style="background-color: rgb(229, 229, 229); border-radius: .5rem; padding: 4px; text-align: center; border: 0px; margin-left: 5px; width: 88%;">
+                            <option value="{{order.state}}">
+                                {% if order.state == "pendiente" %}
+                                    Pendiente
+                                {% elif order.state == "procesando" %}
+                                    Procesando
+                                {% elif order.state == "completado" %}
+                                    Completado
+                                {% endif %}
+                            </option>
+                            {% if not order.state == "pendiente" %}
+                                <option value="pendiente">Pendiente</option>
+                            {% endif %}
+                            {% if not order.state == "procesando" %}
+                                <option value="procesando">Procesando</option>
+                            {% endif %}
+                            {% if not order.state == "completado" %}
+                                <option value="completado">Completado</option>
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <label for="details">Detalles</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <input type="text" name="details" id="details" value="{{ order.details }}">
+                    </div>
+
+                    <label for="temperature">Temperatura</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-temperature-high"></i> 
+                        {% if not order.temperature %}
+                            <input type="text" name="temperature" id="temperature" value="No hay lecturas" readonly style="background-color: rgb(240, 240, 240);">
+                        {% else %}
+                            <input type="text" name="temperature" id="temperature" value="{{ order.temperature }} C" readonly style="background-color: rgb(240, 240, 240);">
+                        {% endif %}
+                    </div>
+
+                    <label for="dateTime">Fecha de registro</label>
+                    <div class="div-input">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" name="dateTime" id="dateTime" value="{{ order.dateTime }}" readonly style="background-color: rgb(240, 240, 240);">
+                    </div>
+
+                    <button class="submit-button" type="submit" style="width: 100%; color: rgb(202, 255, 203); border-radius: 1rem; padding: 8px 10px; border: 1px solid green; background-color: rgb(82, 152, 82);">
+                        <i class="fa-solid fa-save"></i> Guardar
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

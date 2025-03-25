@@ -6,6 +6,8 @@
     flex-direction: column; 
     align-items: center; 
     border-radius: 1rem;
+    background-color: rgb(240, 240, 240);
+    margin: 10px;
 }
 
 .icon-wifi{
@@ -14,6 +16,14 @@
     border-radius: 1rem; 
     border: 1px solid green; 
     background-color: rgb(180, 206, 180);
+}
+
+.icon-wifi-off{
+    color: rgb(202, 202, 202); 
+    padding: 12px 10px; 
+    border-radius: 1rem; 
+    border: 1px solid rgb(59, 59, 59); 
+    background-color: rgb(89, 89, 89);
 }
 
 .box-card div p{
@@ -39,8 +49,22 @@ form{
     border: 0px;
     margin-left: 5px;
 }
+
 .div-input input:focus {
     outline: none;
+}
+
+.input-serie{
+    border: 0px;
+    background-color: rgb(229, 229, 229); 
+    text-align: center;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.input-serie:focus{
+    outline: none;
+
 }
 
 .div-input{

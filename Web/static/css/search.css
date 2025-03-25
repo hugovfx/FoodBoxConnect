@@ -31,6 +31,7 @@
     padding: 10px;
     border: 2px solid var(--primary-color);
     outline: none;
+    background-color: rgb(203, 203, 203);
     transition: border-color 0.3s ease-in-out;
 }
 
@@ -67,7 +68,7 @@
     display: inline-block;
     font-size: 4ch;
     font-weight: bold;
-    color: rgb(163, 163, 163);/* Color inicial */
+    color: rgb(151, 167, 160);/* Color inicial */
     animation: wave 1.5s infinite alternate;
 }
 
@@ -88,9 +89,9 @@
 
 
 @keyframes wave {
-    0% { color: hsl(0, 0%, 67%); }
-    50% { color: hsl(0, 0%, 49%); }
-    100% { color: hsl(0, 0%, 42%); }
+    0% { color: hsl(162, 17%, 61%); text-shadow: 0px 0px 12px rgb(154, 184, 171);}
+    50% { color: hsl(169, 7%, 47%); text-shadow: 0px 0px 12px rgb(94, 113, 109);}
+    100% { color: hsl(166, 10%, 41%); text-shadow: 0px 0px 12px rgb(52, 62, 60);}
 }
 
 /* Diseño Responsivo */

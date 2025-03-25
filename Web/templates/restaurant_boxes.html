@@ -7,53 +7,65 @@
 {% endblock %}
 
 {% block contenido %}
-<p>
-    {% if not boxes %}
-        No hay cajas asociadas.
-    {% else %}
+  {% if not boxes %}
+    No hay cajas asociadas.
+  {% else %}
     <p>Cantidad de cajas: {{ boxes|length }}</p>
     <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
         {% for box in boxes %}
             <div class="box-card">
-                <div style="display: flex; flex-direction: row; align-items: center;">
-                    <i class="fa-solid fa-wifi icon-wifi"></i>
-                    <p>{{ box.serie }}</p>
-                </div>
+                {% if box.on %}
+                    <div style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+                        <i class="fa-solid fa-wifi icon-wifi"></i>
+                        <input type="text" name="serie" id="serie" value="{{ box.serie }}" readonly class="input-serie">
+                    </div>
+                {% else %}
+                    <div style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+                        <i class="fa-solid fa-wifi icon-wifi-off"></i>
+                        <input type="text" name="serie" id="serie" value="{{ box.serie }}" readonly class="input-serie">
+                    </div>
+                {% endif %}
+
+
                 <form action="" method="POST">
+                    {% csrf_token %}
                     <label for="name">Nombre</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box"></i> 
+                        <i class="fa-solid fa-id-card"></i> 
                         <input type="text" name="name" id="name" value="{{ box.name }}">
                     </div>
                     <label for="model">Modelo</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box"></i> 
-                        <input type="text" name="model" id="model" value="{{ box.model }}">
+                        <i class="fa-solid fa-microchip"></i> 
+                        <input type="text" name="model" id="model" value="{{ box.model }}" readonly style="background-color: rgb(240, 240, 240);">
                     </div>
+                    
                     <label for="box_key">Nip</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box"></i>
-                        <input type="text" name="box_key" id="box_key" value="{{ box.box_key }}">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="text" name="box_key" id="box_key" value="{{ box.box_key }}" readonly style="background-color: rgb(240, 240, 240);">
                     </div>
                     <label for="state">Status</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box"></i> 
-                        <input type="text" name="state" id="state" value="{{ box.state }}">
+                        <i class="fa-solid fa-circle-info"></i> 
+                        <input type="text" name="state" id="state" value="{{ box.state }}" readonly style="background-color: rgb(240, 240, 240);">
                     </div>
-                    <label for="position">Posicion</label>
+                    <label for="position">Posición</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box input-icon"></i> 
+                        <i class="fa-solid fa-boxes-stacked"></i>
                         <input type="text" name="position" id="position" value="{{ box.position }}">
                     </div>
                     <label for="dateTime">Fecha de registro</label>
                     <div class="div-input">
-                        <i class="fa-solid fa-box input-icon"></i> 
-                        <input type="text" name="position" id="dateTime" value="{{ box.dateTime }}">
+                        <i class="fa-solid fa-calendar input-icon"></i> 
+                        <input type="text" name="dataTime" id="dateTime" value="{{ box.dateTime }}" readonly style="background-color: rgb(240, 240, 240);">
                     </div>
+                    <button class="submit-button" type="submit" style="width: 100%; color: rgb(202, 255, 203); border-radius: 1rem; padding: 8px 10px; border: 1px solid green; background-color: rgb(82, 152, 82);">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                    </button>
                 </form>
             </div>
         {% endfor %}
-        </div>
-    {% endif %}
-</p>
+    </div>
+  {% endif %}
 {% endblock %}

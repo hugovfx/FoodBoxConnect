@@ -1,12 +1,12 @@
 :root {
-    --primary-color: #2e3035;
-    --secondary-color: #5e636f;
-    --card-color: #46494e;
-    --cardA-color: #555b63;
-    --background-color: #f2f2f2;
+    --primary-color: #83a69f; /* Verde azulado suave */
+    --secondary-color: #6b8c86; /* Un tono más oscuro para contraste */
+    --card-color: #d3e1de; /* Un verde pastel claro para tarjetas */
+    --cardA-color: #99b6b0; /* Intermedio entre primary y secondary */
+    --background-color: #eef4f2; /* Un tono muy claro y suave para el fondo */
     --font-family: "Poppins", sans-serif;
-    --text-color: white;
-    --div-input-color: rgb(247, 248, 253);
+    --text-color: #2f4f4a; /* Un gris oscuro con matiz verde azulado para legibilidad */
+    --div-input-color: #e1edeb; /* Un gris claro con matiz verde azulado */
 }
 
 body {

@@ -30,7 +30,7 @@
         </div>
         <button type="submit">Iniciar Sesión</button>
         
-        <p style="color: white;"> ¿No tienes cuenta? <a href="{% url 'register' %}" style="color: rgb(144, 144, 255); text-decoration: none;"> Registrate </a></p>
+        <p style="color: var(--text-color);"> ¿No tienes cuenta? <a href="{% url 'register' %}" style="color: rgb(144, 144, 255); text-decoration: none;"> Registrate </a></p>
 
         {% if error %} <p style="color: red;">{{ error }}</p> {% endif %}
     </form>

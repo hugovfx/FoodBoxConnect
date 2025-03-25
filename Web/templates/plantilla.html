@@ -25,6 +25,7 @@
                     <li><a href="{% url 'boxes_list' %}">Contenedores</a></li>
                 {% elif user.role == "restaurante" %}
                     <li><a href="{% url 'restaurant_panel' %}">Administración</a></li>
+                    <li><a href="{% url 'add_order' %}">Nuevo Pedido</a></li>
                 {% elif user.role == "cliente" %}
                     <li><a href="{% url 'login' %}">Mis Pedidos</a></li>
                 {% endif %}

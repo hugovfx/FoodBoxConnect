@@ -1,0 +1,45 @@
+{% extends 'restaurant_panel.html' %}
+
+{% load static %}
+
+{% block linksR %}
+<link rel="stylesheet" href="{% static 'css/restaurant_boxes.css' %}">
+<link rel="stylesheet" href="{% static 'css/restaurant_addBox.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 1rem; box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.203); padding: 55px;">
+        
+        <!-- Icono de exclamación con tooltip -->
+        <div class="info-icon">!</div>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <label for="serie">Número Serie</label>
+            <div class="div-input">
+                <i class="fas fa-microchip fa-code"></i>
+                <input type="text" name="serie" id="serie" placeholder="Número Serie" required>
+            </div>
+            <label for="name">Nombre</label>
+            <div class="div-input">
+                <i class="fa-solid fa-id-card"></i> 
+                <input type="text" name="name" id="name" placeholder="Nombre" required>
+            </div>
+            <label for="model">Modelo</label>
+            <div class="div-input">
+                <i class="fa-solid fa-microchip"></i> 
+                <input type="text" name="model" id="model" placeholder="Modelo" required>
+            </div>
+            <label for="position">Posición</label>
+            <div class="div-input">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <input type="text" name="position" id="position" placeholder="Posición" required>
+            </div>
+            <button class="submit-button" type="submit" style="font-size: 20px; width: 100%; color: rgb(202, 255, 203); border-radius: 1rem; margin-top: 10px; padding: 6px 0px; border: 1px solid green; background-color: rgb(82, 152, 82);">
+                Agregar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

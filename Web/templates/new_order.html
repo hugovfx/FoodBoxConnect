@@ -1,0 +1,74 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+
+{% block title %}Registrar Pedido{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/new_order.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <form class="data" method="POST">
+        {% csrf_token %}
+
+        <!-- Selección de Caja -->
+        <div class="single-div">
+            <label for="serie"><i class="fa-solid fa-box"></i> Seleccionar Caja</label>
+            <div class="row-div">
+                <select class="data-input" id="serie" name="serie" required>
+                    <option value="">Seleccione una caja</option>
+                    {% for box in cajas %}
+                        <option value="{{ box.serie }}">{{ box.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Detalles -->
+        <div class="single-div">
+            <label for="details"><i class="fa-solid fa-clipboard-list"></i> Detalles</label>
+            <div class="row-div">
+                <textarea placeholder="Detalles del pedido" class="data-input" id="details" name="details" required></textarea>
+            </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="single-div">
+            <label for="state"><i class="fa-solid fa-info-circle"></i> Estado</label>
+            <div class="row-div">
+                <select class="data-input" id="state" name="state" required>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="procesando">Procesando</option>
+                    <option value="completado">Completado</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        {% if error %}
+            <div class="error-email" id="message-alert">
+                <p><i class="fa-solid fa-triangle-exclamation"></i> {{ error }}</p>        
+            </div>
+        {% endif %}
+
+        <!-- Botón de enviar -->
+        <button class="submit-button" type="submit">
+            <i class="fa-solid fa-paper-plane"></i> Registrar Pedido
+        </button>
+    </form>
+</div>
+
+<script src="{% static 'js/register.js' %}"></script>
+
+{% if error %}
+    <script>
+        setTimeout(function() {
+            var alert = document.getElementById("message-alert");
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 4000);  
+    </script>
+{% endif %}
+{% endblock %}

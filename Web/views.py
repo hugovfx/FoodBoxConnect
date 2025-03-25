@@ -7,6 +7,7 @@ from django.core import signing
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from datetime import datetime
 
 
 #-------------------------------- FUNCIONES --------------------------------#
@@ -195,55 +196,139 @@ def profile(request):
 #   RESTAURATES
 def restaurant_panel(request):
     user = request.session.get("user")
+    if not user or user["role"] != "restaurante":
+        return redirect("home")  # Solo restaurantes pueden ver esto
     user = users_collection.find_one({"email":user["email"]})
     return render(request, "restaurant_panel.html", {"user": user})
 
 def restaurant_boxes(request):
     user = request.session.get("user")
+    if not user or user["role"] != "restaurante":
+        return redirect("home")  # Solo restaurantes pueden ver esto
+    
     user = users_collection.find_one({"email":user["email"]})
     boxes = list(boxes_collection.find({"id_owner": ObjectId(user['_id'])}))
+    
+    if request.method == "POST":
+        name = request.POST["name"]
+        position = request.POST["position"]
+        user_id = ObjectId(user['_id'])
+        serie = request.POST["serie"]
+
+        boxes_collection.update_one(
+            {"id_owner": user_id , "serie": serie},
+            {"$set": {"name": name, "position": position}}
+        )
+        
+        return redirect("restaurant_boxes")
     return render(request, "restaurant_boxes.html", {"user": user, "boxes":boxes})
 
-def pedidos_restaurante(request):
+def restaurant_addBox(request):
     user = request.session.get("user")
-
     if not user or user["role"] != "restaurante":
         return redirect("home")  # Solo restaurantes pueden ver esto
 
-    return render(request, "pedidos_restaurante.html", {"user": user})
-
-def add_order(request):
-    user = request.session.get("user")
-    if  not user and user["role"] != "restaurante":
-        return redirect("home") # Solo restaurantes pueden ver esto
+    user = users_collection.find_one({"email":user["email"]})
 
     if request.method == "POST":
         name = request.POST["name"]
-        description = request.POST["description"]
-        flag = 1
-        clave = ""
+        model = request.POST["model"]
+        position = request.POST["position"]
+        serie = request.POST["serie"]
 
-        while (flag):
-            clave = randomclave()
-            if orders_collection.find_one({"clave": clave}):
-                flag = 1
-            else:
-                flag = 0
-          
-        if request.method == "POST":
-            name = request.POST["name"]
-            description = request.POST["description"]
-            num_contenedor = request.POST["num_contenedor"]
+        if boxes_collection.find_one({"serie": serie}):
+            return redirect("restaurant_addBox")
 
-            new_box = {
-                "id_user": user["id"],
-                "clave": clave,
-                "name": name,
-                "description": description,
-            }
+        new_box = {
+            "name": name,
+            "model": model,
+            "box_key": "none",
+            "state": "Apagado",
+            "serie": serie,
+            "position": position,
+            "dateTime": datetime.now(),
+            "id_owner": ObjectId(user['_id'])
+        }
+        boxes_collection.insert_one(new_box)
+        return redirect("restaurant_addBox") 
 
-            boxes_collection.insert_one(new_box)
-    return redirect ("boxes")
+    return render(request, "restaurant_addBox.html", {"user": user})
+
+def restaurant_orders(request):
+    user = request.session.get("user")
+    if not user or user["role"] != "restaurante":
+        return redirect("home") # Solo restaurantes pueden ver esto
+    
+    if request.method == "POST":
+        details = request.POST["details"]
+        state = request.POST["state"]
+        order_key = request.POST["order_key"]
+        
+        orders_collection.update_one(
+            {"order_key": order_key},
+            {"$set": {
+                "details": details,
+                "state": state
+            }}
+        )
+
+    user = users_collection.find_one({"email":user["email"]})
+    orders = list(orders_collection.find({"id_owner":ObjectId(user["_id"])}))
+
+    return render(request, "restaurant_orders.html", {"user": user, "orders":orders})
+
+def generate_order_key():
+    values = "1234567890ABCD"
+    orden = ""
+    for i in range(9):
+        numero = random.randint(0, 13);
+        orden += values[numero]
+    return orden
+
+def add_order(request):
+    user = request.session.get("user")
+    if not user or user["role"] != "restaurante":
+        return redirect("home")  # Solo restaurantes pueden acceder
+
+    # Obtener datos actualizados del usuario
+    user = users_collection.find_one({"email": user["email"]})
+
+    # Obtener todas las cajas del restaurante
+    cajas = list(boxes_collection.find({"id_owner": user["_id"]}))
+
+    if request.method == "POST":
+        serie = request.POST["serie"]  # Se almacena la serie de la caja
+        details = request.POST["details"]
+        state = request.POST["state"]
+
+        id_box = boxes_collection.find_one({"serie":serie})
+
+        generar = True;
+        while generar:
+            order_key = generate_order_key()  # Generar clave única
+            if not orders_collection.find_one({"order_key":order_key}):
+                generar = False
+            
+
+        dateTime = datetime.now()  # Fecha y hora actuales
+
+        new_order = {
+            "order_key": order_key,
+            "id_box": ObjectId(id_box['_id']),
+            "details": details,
+            "state": state,
+            "dateTime": dateTime,
+            "id_owner": ObjectId(user["_id"])
+        }
+
+        orders_collection.insert_one(new_order)
+        redirect ('add_order')
+
+    return render(request, "new_order.html", {"user": user, "cajas": cajas})
+
+
+
+
 
 def randomclave():
     valores = "abcdefghijklmnopqrstuvwxyz0123456789"
