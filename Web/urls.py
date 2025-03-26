@@ -19,6 +19,9 @@ urlpatterns = [
     path("api/hello/", views.api_hello, name="api_hello"),  
     path("plantilla", views.plantilla, name="plantilla"),
     path("order/<str:order_key>/", views.order, name="order"),
+    # Usuarios
+    path("ordenes/usuario", views.user_orders, name="user_orders"),
+
     # Restaurantes
     path("administrar-restaurante/", views.restaurant_panel, name="restaurant_panel"),
     path("administrar-restaurante/registrar-pedido", views.add_order, name="add_order"),

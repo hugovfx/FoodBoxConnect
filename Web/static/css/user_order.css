@@ -1,0 +1,117 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.orders_content {
+    width: 80%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #009688;
+    border-radius: 1rem;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.orders_card {
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.order-summary {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.orders-list {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;  /* Desplazamiento horizontal */
+    gap: 15px;
+    padding-bottom: 10px;
+    padding-right: 15px; /* Agrega espacio al final para que el desplazamiento se vea bien */
+}
+
+.order-card {
+    min-width: 300px; /* Asegura que cada tarjeta tenga un tamaño mínimo */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Evita que las tarjetas se encojan */
+    transition: transform 0.3s ease-in-out; /* Para un efecto suave en el desplazamiento */
+}
+
+.order-card:hover {
+    transform: scale(1.05); /* Le da un pequeño efecto al pasar el ratón sobre la tarjeta */
+}
+
+.order-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.order-header .icon {
+    font-size: 2rem;
+    color: #4CAF50;
+}
+
+.order-key {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-info {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.order-info label {
+    font-weight: bold;
+    width: 120px;
+}
+
+.icon {
+    margin-left: 10px;
+    font-size: 1.2rem;
+    color: #009688;
+}
+
+.order-status, .order-box, .order-details-info, .order-date {
+    font-size: 1.1rem;
+    color: #555;
+    margin-left: 10px;
+}
+
+.order-info span {
+    font-weight: 500;
+}
+
+/* Asegura que los íconos no se sobrepongan */
+.fas {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}

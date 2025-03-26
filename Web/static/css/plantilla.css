@@ -1,16 +1,8 @@
 
 /* Fondo animado con gradiente */
 body {
-    background: linear-gradient(-45deg, #f6f6f6, #acacac, #acacac, #f6f6f6);
-    background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
+    background-color: white;
     margin: 0px;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
 a {

@@ -27,7 +27,7 @@
                     <li><a href="{% url 'restaurant_panel' %}">Administración</a></li>
                     <li><a href="{% url 'add_order' %}">Nuevo Pedido</a></li>
                 {% elif user.role == "cliente" %}
-                    <li><a href="{% url 'login' %}">Mis Pedidos</a></li>
+                    <li><a href="{% url 'user_orders' %}">Mis Pedidos</a></li>
                 {% endif %}
                 {% if request.path != '/login/' and request.path != '/register/' and request.path != '/restaurant_register/' %}
                     <li><a href="{% url 'profile' %}">Perfil</a></li>

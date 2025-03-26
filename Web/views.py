@@ -340,13 +340,22 @@ def randomclave():
 
 
 #   CLIENTES
-def mis_pedidos(request):
+def user_orders(request):
     user = request.session.get("user")
 
     if not user or user["role"] != "cliente":
         return redirect("home")  # Solo clientes pueden ver sus pedidos
 
-    return render(request, "mis_pedidos.html", {"user": user})
+    user = users_collection.find_one({"email": user["email"]})
+
+    orders = list(orders_collection.find({"user_id": ObjectId(user["_id"])}))
+
+    for order in orders:
+        box = boxes_collection.find_one({"_id": order.get("id_box")})  # Buscar la caja
+        order["box_position"] = box.get("position", "none") if box else "none"
+
+    return render(request, "user_orders.html", {"user": user, "orders": orders})
+
 
 #   ADMIN
 def admin_dashboard(request):
