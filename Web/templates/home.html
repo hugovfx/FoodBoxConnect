@@ -5,7 +5,37 @@
 {% block links %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <style>
-    
+    #input-search {
+        visibility: hidden;
+        opacity: 0;
+        width: 0px;
+        transition: width 0.5s ease, opacity 0.5s ease;
+        background-color: rgb(243, 243, 243);
+        padding: 15.5px;
+        font-size: 22px;
+        border: 0px;
+        border-bottom: 2px solid var(--primary-color);
+        display: none; /* Oculto por defecto */
+    }
+    .visible {
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 170px !important;
+        margin-left: 10px;
+        display: inline-block !important;
+    }
+    .hidden {
+        width: 0px !important;
+        opacity: 0 !important;
+    }
+    .visible:focus {
+        outline: none;
+    }
+    form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 </style>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 {% endblock %}
@@ -15,22 +45,45 @@
 {% block main-content %}
 <div class="contenedor">
     <div class="mensaje">
-        <h1>Mantén tus <span>pedidos <br>seguros</span> 
+        <h1 style="margin-bottom: 4px;">Mantén tus <span>pedidos <br>seguros</span></h1>
+        <p style="margin: 0px;">Evita filas al recolectar tus pedidos</p>
         {% if user.role == "restaurante" %}
-            <a class="button-search" href="#"><strong>Crear</strong></a>
-
-        {% elif user.role == "cliente" %}
-            <a class="button-search" href="#"><strong>Buscar</strong></a>
+        <div style="display: flex; flex-direction: row;">
+            <a class="button-search" href="{% url 'add_order' %}"><strong>Crear</strong></a>
+        </div>
+        {% else %}
+        {% if message %}
+            <p style="margin: 0px;" id="errorMessage">{{message}}</p>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    let mensaje = document.getElementById('errorMessage');
+                    if (mensaje) {
+                        setTimeout(() => {
+                            mensaje.style.transition = "opacity 0.5s ease";
+                            mensaje.style.opacity = "0";
+                            setTimeout(() => mensaje.style.display = "none", 500);
+                        }, 3000); 
+                    }
+                });
+            </script>
         {% endif %}
-        </h1>
-        <p style="margin-bottom: 50px;">Evita filas y ahorra tiempo al recolectar tus pedidos</p>
+        <div style="display: flex; flex-direction: row;">
+            <button class="button-search" id="button-toggle"><strong>Buscar</strong></button>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="button-search" id="button-search" style="display: none;"><strong>Buscar</strong></button>
+                <input type="text" name="order_key" id="input-search" placeholder="Número de orden" required>
+            </form>
+        </div>
+        {% endif %}
     </div>
-    <!-- <model-viewer alt="box" src="https://cdn.glitch.me/5b21573e-ca11-43d9-b877-c30987a9986f/prototipo.glb?v=1742999526235"
-        ar shadow-intensity="1" camera-controls touch-action="pan-y">
-    </model-viewer> -->
+    <model-viewer alt="box" src="https://cdn.glitch.me/5b21573e-ca11-43d9-b877-c30987a9986f/prototipo.glb?v=1742999526235"
+    ar shadow-intensity="1" camera-controls touch-action="pan-y">
+    </model-viewer>
 </div>
+
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-
 {% endblock %}

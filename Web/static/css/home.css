@@ -17,7 +17,7 @@ body {
 
 /* Contenedor principal centrado verticalmente */
 .contenedor {
-    height: 100vh;
+    height: 80vh;
     display: flex;
     padding: 50px;
     flex-direction: row;
@@ -65,14 +65,27 @@ model-viewer {
         transform: translateX(-100px);
     }
 }
+
 .button-search{
     padding: 20px 25px;
     background-color: #009688;
     color: white;
     font-weight: 900;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.36);
-    margin-left: 20px;
+    margin-top: 8px;
     text-decoration: none;
+    border: 0px;
+}
+
+.button-create{
+    padding: 20px 25px;
+    background-color: #009688;
+    color: white;
+    font-weight: 900;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.36);
+    margin-top: 200px;
+    text-decoration: none;
+    border: 0px;
 }
 
 @media (max-width: 768px) {
