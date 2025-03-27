@@ -14,8 +14,39 @@
     {% endblock %}
 </head>
 <body>
+    <!-- Botón para mostrar el menú lateral en móvil -->
+    <button class="menu-btn" id="menu-btn">☰ Menú</button>
+
+    <!-- Menú lateral -->
+    <div class="sidebar" id="sidebar">
+        <a href="javascript:void(0)" class="close-btn" id="close-btn">&times;</a>
+        <ul>
+            {% if user %}
+                {% if user.role == "elmarro" %}
+                    <li><a href="{% url 'admin_panel' %}">Panel Administrador</a></li>
+                    <li><a href="{% url 'boxes' %}">Pedidos</a></li>
+                    <li><a href="{% url 'users' %}">Usuarios</a></li>
+                    <li><a href="{% url 'boxes_list' %}">Contenedores</a></li>
+                {% elif user.role == "restaurante" %}
+                    <li><a href="{% url 'restaurant_boxes' %}">Administración</a></li>
+                    <li><a href="{% url 'add_order' %}">Nuevo Pedido</a></li>
+                {% elif user.role == "cliente" %}
+                    <li><a href="{% url 'user_orders' %}">Mis Pedidos</a></li>
+                {% endif %}
+                {% if request.path != '/login/' and request.path != '/register/' and request.path != '/restaurant_register/' %}
+                    <li><a href="{% url 'profile' %}">Perfil</a></li>
+                    <li><a href="{% url 'cerrar_sesion' %}">Cerrar sesión</a></li>
+                {% endif %}
+            {% else %}
+                <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+                <li><a href="{% url 'register' %}">Registrarse</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Barra de navegación en la parte inferior -->
     <nav class="navbar" id="navbar">
-        <a href="{% url 'home' %}"><img src="{% static 'img/foodboxconnect.png' %}" alt="FodBoxConnect" style="width: 150px;"></a>
+        <a href="{% url 'home' %}"><img src="{% static 'img/foodbox.png' %}" alt="FodBoxConnect" style="width: 150px; margin-left: 20px;"></a>
         <ul style="margin-right: 10%;">
             {% if user %}
                 {% if user.role == "elmarro" %}
@@ -39,12 +70,21 @@
             {% endif %}
         </ul>
     </nav>
-    
+
     {% block main-content %}
     {% endblock %}
     {% block content %}
     {% endblock %}
-    
+
     <script src="{% static 'js/boubles.js' %}"></script>
+    <script>
+        // Función para abrir y cerrar el menú lateral
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('close-btn');
+
+        menuBtn.onclick = () => sidebar.classList.add('open');
+        closeBtn.onclick = () => sidebar.classList.remove('open');
+    </script>
 </body>
 </html>

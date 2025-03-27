@@ -12,46 +12,55 @@
 <div class="main-content">
     <div class="orders_content">
         {% if not orders %}
-        <p>No has realizado pedidos.</p>
+        <p class="order-summary" style="color: var(--primary-color);"><i class="fas fa-shopping-cart"></i> 0 </p>
         {% else %}
-        <p class="order-summary">Cantidad de pedidos realizados: {{ orders|length }}</p>
+        <p class="order-summary" style="color: var(--primary-color);"><i class="fas fa-shopping-cart"></i> {{ orders|length }}</p>
         <div class="orders_card">
-            <div class="orders-list">
-                {% for order in orders %}
+            {% for order in orders %}
                 <div class="order-card">
                     <div class="order-header">
                         <i class="fas fa-clipboard-list icon"></i>
-                        
                         <span class="order-key">{{ order.order_key }}</span>
                     </div>
-                    
-                    <div class="order-details">
-                        <div class="order-info">
-                                    <label for="state">Estado:</label>
-                                    <i class="fas fa-check-circle icon"></i>
-                                    <span class="order-status">{{ order.state }}</span>
-                                </div>
-                                <div class="order-info">
-                                    <label for="model">Caja (Posición):</label>
-                                    <i class="fas fa-map-marker-alt icon"></i>
-                                    <span class="order-box">{{ order.box_position }}</span>
-                                </div>
-                                <div class="order-info">
-                                    <label for="box_key">Detalles:</label>
-                                    <i class="fas fa-hamburger icon"></i>
-                                    <span class="order-details-info">{{ order.details }}</span>
-                                </div>
-                                <div class="order-info">
-                                    <label for="dateTime">Fecha y Hora:</label>
-                                    <i class="fas fa-calendar-alt icon"></i>
-                                    <span class="order-date">{{ order.dateTime }}</span>
-                                </div>
-                            </div>
+                    <div class="order-info">
+                        <p>Nip</p>
+                        <div style="display: flex; flex-direction: row;">
+                            <i class="fas fa-check-circle icon"></i>
+                            <input type="password" class="order-status" value="{{ order.key }}" readonly style="border: 0px; width: 56px;">
                         </div>
-                    {% endfor %}
+                    </div>
+                    <div class="order-info">
+                        <p>Estado</p>
+                        <div style="display: flex; flex-direction: row;">
+                            <i class="fas fa-check-circle icon"></i>
+                            <span class="order-status">{{ order.state }}</span>
+                        </div>
+                    </div>
+                    <div class="order-info">
+                        <p>Caja (Posición)</p>
+                        <div style="display: flex; flex-direction: row;">
+                            <i class="fa-solid fa-boxes-stacked icon"></i>
+                            <span class="order-status">{{ order.box_position }}</span>
+                        </div>
+                    </div>
+                    <div class="order-info">
+                        <p>Detalles</p>
+                        <div style="display: flex; flex-direction: row;">
+                            <i class="fas fa-hamburger icon"></i>
+                            <span class="order-status">{{ order.details }}</span>
+                        </div>
+                    </div>
+                    <div class="order-info">
+                        <p>Fecha y Hora</p>
+                        <div style="display: flex; flex-direction: row;">
+                            <i class="fas fa-calendar-alt icon"></i>
+                            <span class="order-status">{{ order.dateTime }}</span>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
+            {% endfor %}
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

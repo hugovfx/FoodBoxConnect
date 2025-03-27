@@ -353,6 +353,7 @@ def user_orders(request):
     for order in orders:
         box = boxes_collection.find_one({"_id": order.get("id_box")})  # Buscar la caja
         order["box_position"] = box.get("position", "none") if box else "none"
+        order["key"] = box.get("key")
 
     return render(request, "user_orders.html", {"user": user, "orders": orders})
 

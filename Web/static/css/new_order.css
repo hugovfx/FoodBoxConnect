@@ -2,7 +2,7 @@
     background-color: var(--card-color);
     border: 0;
     border-radius: 1rem;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.445);
     padding: 20px 0px 20px 0px;
     margin-top: 50px;
     display: flex;
@@ -202,10 +202,6 @@ i {
 .select-items div:hover, .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
-
-
-
-
 
 /* The container must be positioned relative: */
 .custom-select {

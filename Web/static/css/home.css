@@ -1,15 +1,88 @@
 :root {
-    --primary-color: #83a69f; /* Verde azulado suave */
-    --secondary-color: #6b8c86; /* Un tono más oscuro para contraste */
-    --card-color: #d3e1de; /* Un verde pastel claro para tarjetas */
-    --cardA-color: #99b6b0; /* Intermedio entre primary y secondary */
-    --background-color: #eef4f2; /* Un tono muy claro y suave para el fondo */
+    --primary-color: #009688; /* Verde azulado suave */
+    --secondary-color: #4dc5b9; /* Un tono más oscuro para contraste */
+    --card-color: #fafafa; /* Un verde pastel claro para tarjetas */
+    --cardA-color: #e9e9e9; /* Intermedio entre primary y secondary */
+    --background-color: #f4f4f4; /* Un tono muy claro y suave para el fondo */
     --font-family: "Poppins", sans-serif;
-    --text-color: #2f4f4a; /* Un gris oscuro con matiz verde azulado para legibilidad */
-    --div-input-color: #e1edeb; /* Un gris claro con matiz verde azulado */
+    --text-color: #07564e; /* Un gris oscuro con matiz verde azulado para legibilidad */
+    --div-input-color: #bcdbd6; /* Un gris claro con matiz verde azulado */
 }
 
 body {
     font-family: var(--font-family);
     background-color: var(--background-color);
 }
+
+
+/* Contenedor principal centrado verticalmente */
+.contenedor {
+    height: 100vh;
+    display: flex;
+    padding: 50px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Mensaje alineado a la izquierda */
+.mensaje {
+    text-align: left;
+    width: 50%;
+}
+
+.mensaje h1 {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.mensaje h1 span {
+    color: #009688;
+}
+
+.mensaje p {
+    font-size: 20px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Modelo 3D con animación */
+model-viewer {
+    width: 600px;
+    height: 500px;
+    animation: slide-in 1.2s ease-out forwards;
+    opacity: 0;
+}
+
+/* Animación: Aparece deslizándose desde la derecha */
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(0px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-100px);
+    }
+}
+.button-search{
+    padding: 20px 25px;
+    background-color: #009688;
+    color: white;
+    font-weight: 900;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.36);
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .contenedor{
+        padding: 10px;
+        flex-direction: column;
+    }
+    .mensaje{
+        width: 100%;
+        max-width: 100%;
+    }
+}
+

@@ -3,41 +3,31 @@
 {% load static %}
 
 {% block links %}
-<link rel="stylesheet" href="{% static 'css/search.css' %}">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<style>
+    
+</style>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 {% endblock %}
 
 {% block title %}Búsqueda de Pedidos{% endblock %}
 
 {% block main-content %}
-<div class="main-content">
-    <div class="div-search">
-        <p class="wave">
-            <span>B</span><span>u</span><span>s</span><span>c</span><span>a</span>  <span>T</span><span>u</span>  <span>P</span><span>e</span><span>d</span><span>i</span><span>d</span><span>o</span>
-        </p>        
-        {% if message %}
-            <div class="alert" id="message-alert">
-                <p>{{ message }}</p>        
-            </div>
-        {% endif %}
-        
-        <form action="{% url 'home' %}" method="POST">
-            {% csrf_token %}
-            <input class="input-search" type="text" name="order_key" id="search" placeholder="Numero de pedido..." required>
-            <button class="input-submit" type="submit">Buscar</button>
-        </form>
-    </div>
+<div class="contenedor">
+    <div class="mensaje">
+        <h1>Mantén tus <span>pedidos <br>seguros</span> 
+        {% if user.role == "restaurante" %}
+            <a class="button-search" href="#"><strong>Crear</strong></a>
 
-    {% if message %}
-    <!-- Script para ocultar el mensaje después de un tiempo -->
-    <script>
-            setTimeout(function() {
-                var alert = document.getElementById("message-alert");
-                if (alert) {
-                    alert.style.display = 'none';
-                }
-            }, 4000);  // El mensaje desaparecerá después de 5 segundos
-        </script>
-    {% endif %}
+        {% elif user.role == "cliente" %}
+            <a class="button-search" href="#"><strong>Buscar</strong></a>
+        {% endif %}
+        </h1>
+        <p style="margin-bottom: 50px;">Evita filas y ahorra tiempo al recolectar tus pedidos</p>
+    </div>
+    <!-- <model-viewer alt="box" src="https://cdn.glitch.me/5b21573e-ca11-43d9-b877-c30987a9986f/prototipo.glb?v=1742999526235"
+        ar shadow-intensity="1" camera-controls touch-action="pan-y">
+    </model-viewer> -->
 </div>
 {% endblock %}
 
