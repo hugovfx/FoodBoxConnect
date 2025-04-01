@@ -81,3 +81,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración para cors si es necesario
 # CORS_ALLOW_ALL_ORIGINS = True
+
+# Agregar o modificar estas líneas en settings.py
+# Cambiar esto en settings.py
+
+# Configuración básica de archivos estáticos
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'Web/static',
+]
+
+# Simplificar Whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Configuración para servir archivos estáticos en producción sin collectstatic
+if not DEBUG:
+    WHITENOISE_USE_FINDERS = True
+    WHITENOISE_AUTOREFRESH = True
+    WHITENOISE_MANIFEST_STRICT = False

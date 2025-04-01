@@ -2,17 +2,9 @@
 # exit on error
 set -o errexit
 
-# Suprimir avisos de pip
+# Solo instalar dependencias
 export PIP_DISABLE_PIP_VERSION_CHECK=1
+pip install --no-cache-dir -r requirements.txt
 
-# Instalación de dependencias con output verboso para identificar problemas
-pip install -r requirements.txt -v
-
-# Mostrar las dependencias instaladas para verificar
-pip list
-
-# Recolectar archivos estáticos
-python manage.py collectstatic --no-input --verbosity 2
-
-# Imprimir mensaje de finalización para confirmar que el script terminó correctamente
-echo "Build script completed successfully!"
+# No ejecutar collectstatic, lo manejaremos en el código
+echo "Skipping collectstatic, will handle static files in code"
