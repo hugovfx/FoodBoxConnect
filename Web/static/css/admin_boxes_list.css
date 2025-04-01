@@ -1,0 +1,373 @@
+/* Estilos para la página de listado de cajas */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.section-header h2 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.search-container {
+    display: flex;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.search-container input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.search-container button {
+    padding: 10px 15px;
+    background-color: var(--primary-color, #4682B4);
+    color: white;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    cursor: pointer;
+}
+
+.status-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.status-filter {
+    padding: 8px 15px;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.status-filter.active {
+    background-color: var(--primary-color, #4682B4);
+    color: white;
+}
+
+.boxes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    grid-column: 1 / -1;
+}
+
+.box-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.box-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.box-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.box-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.box-serie {
+    font-family: monospace;
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+.box-status-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.box-status {
+    padding: 5px 10px;
+    border-radius: 1rem;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.box-online {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85em;
+}
+
+.box-online.online {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.box-online.offline {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.box-info {
+    margin: 15px 0;
+}
+
+.box-info p {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    width: 20px;
+    margin-right: 10px;
+    color: #6c757d;
+}
+
+.box-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.edit-button, .view-button {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.edit-button {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.view-button {
+    background-color: var(--primary-color, #4682B4);
+    color: white;
+}
+
+/* Toggle switch para el estado on/off */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-input {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.toggle-label {
+    cursor: pointer;
+    width: 50px;
+    height: 25px;
+    background: #f8d7da;
+    display: block;
+    border-radius: 25px;
+    position: relative;
+}
+
+.toggle-label:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 19px;
+    height: 19px;
+    background: #fff;
+    border-radius: 19px;
+    transition: 0.3s;
+}
+
+.toggle-input:checked + .toggle-label {
+    background: #d4edda;
+}
+
+.toggle-input:checked + .toggle-label:after {
+    left: calc(100% - 3px);
+    transform: translateX(-100%);
+}
+
+/* Modal styles for box details and editing */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.cancel-button {
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    color: #212529;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+/* Detalles del box en el modal */
+.detail-section {
+    margin-bottom: 20px;
+}
+
+.detail-section h3 {
+    font-size: 1.1em;
+    color: var(--primary-color, #4682B4);
+    margin: 0 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-section p {
+    margin: 8px 0;
+}
+
+#boxDetailsContent {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .boxes-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+    
+    .box-actions {
+        flex-direction: column;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .section-header p {
+        margin-top: 10px;
+    }
+    
+    .box-header {
+        flex-direction: column;
+    }
+    
+    .box-status-container {
+        margin-top: 10px;
+        align-self: flex-start;
+    }
+}

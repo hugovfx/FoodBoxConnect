@@ -1,0 +1,239 @@
+/* 📌 Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* 📌 Contenedor principal */
+.contenedor-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 100px;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+/* 📌 Panel de administración */
+.panel-administracion {
+    width: 80%;
+    height: 70vh;
+    display: flex;
+    background: var(--background-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.205);
+    box-sizing: border-box; 
+}
+
+/* 📌 Barra lateral */
+.barra-lateral {
+    width: 25%;
+    background-color: var(--card-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.enlace-navegacion {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.enlace-navegacion:hover {
+    background: var(--cardA-color);
+}
+
+/* 📌 Contenido de administración */
+.contenido-administracion {
+    width: 75%;
+    padding: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+hr{
+    display: none;
+}
+
+/* Estilos para tarjetas de usuarios */
+.user-card {
+    padding: 12px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.216);
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    background-color: rgb(240, 240, 240);
+    margin: 15px 0;
+    position: relative;
+}
+
+.user-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-role {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 1rem;
+    font-size: 0.9em;
+    background-color: #4682B4;
+    color: white;
+}
+
+.role-cliente {
+    background-color: #5cb85c;
+}
+
+.role-restaurante {
+    background-color: #f0ad4e;
+}
+
+.role-elmarro {
+    background-color: #d9534f;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.edit-button, .delete-button {
+    padding: 8px 12px;
+    border-radius: 1rem;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.edit-button {
+    background-color: #4682B4;
+    color: white;
+}
+
+.delete-button {
+    background-color: #d9534f;
+    color: white;
+}
+
+/* Estilos para los formularios */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    background-color: rgb(229, 229, 229);
+}
+
+.input-icon {
+    margin-right: 10px;
+    color: #4682B4;
+}
+
+/* Estilos para las cajas */
+.box-card {
+    padding: 12px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.216);
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    background-color: rgb(240, 240, 240);
+    margin: 15px 0;
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.box-key {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.box-status {
+    padding: 5px 10px;
+    border-radius: 1rem;
+    font-size: 0.9em;
+}
+
+.status-active {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.status-disabled {
+    background-color: #d9534f;
+    color: white;
+}
+
+/* 📌 Diseño responsivo para móviles */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden; /* Evitar el desbordamiento lateral */
+    }
+
+    .contenedor-principal {
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+        margin-top: 100px; 
+    }
+
+    .panel-administracion {
+        width: 100%;  
+        flex-direction: column;
+        height: auto;
+    }
+
+    .barra-lateral {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: space-around;
+    }
+
+    .enlace-navegacion {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .contenido-administracion {
+        width: 100%;
+    }
+    
+    hr{
+        display: block;
+    }
+    
+    .user-card, .box-card {
+        padding: 8px;
+        margin: 10px 0;
+    }
+    
+    .edit-button, .delete-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}

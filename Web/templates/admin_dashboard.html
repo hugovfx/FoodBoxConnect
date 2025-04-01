@@ -1,0 +1,347 @@
+{% extends 'admin_panel.html' %}
+
+{% load static %}
+
+{% block linksA %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="dashboard-header">
+    <h2>Panel de Control</h2>
+    <div class="date-display">
+        <i class="fa-regular fa-calendar"></i>
+        <span id="current-date"></span>
+    </div>
+</div>
+
+<div class="stats-overview">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-value">{{ users_count }}</span>
+            <span class="stat-label">Usuarios Totales</span>
+        </div>
+        <div class="stat-footer">
+            <span class="stat-change positive">
+                <i class="fa-solid fa-arrow-up"></i> 5%
+            </span>
+            <span class="stat-period">desde el mes pasado</span>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-value">{{ restaurants_count }}</span>
+            <span class="stat-label">Restaurantes</span>
+        </div>
+        <div class="stat-footer">
+            <span class="stat-change positive">
+                <i class="fa-solid fa-arrow-up"></i> 12%
+            </span>
+            <span class="stat-period">desde el mes pasado</span>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-boxes-stacked"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-value">{{ boxes_count }}</span>
+            <span class="stat-label">Cajas Activas</span>
+        </div>
+        <div class="stat-footer">
+            <span class="stat-change positive">
+                <i class="fa-solid fa-arrow-up"></i> 8%
+            </span>
+            <span class="stat-period">desde el mes pasado</span>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-clipboard-list"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-value">{{ orders_count }}</span>
+            <span class="stat-label">Pedidos Mensuales</span>
+        </div>
+        <div class="stat-footer">
+            <span class="stat-change positive">
+                <i class="fa-solid fa-arrow-up"></i> 18%
+            </span>
+            <span class="stat-period">desde el mes pasado</span>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-content">
+    <div class="content-row">
+        <div class="chart-card">
+            <div class="card-header">
+                <h3>Pedidos por Día</h3>
+                <div class="card-actions">
+                    <select id="ordersChartRange">
+                        <option value="week">Esta semana</option>
+                        <option value="month" selected>Este mes</option>
+                        <option value="quarter">Último trimestre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="ordersChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="stats-card">
+            <div class="card-header">
+                <h3>Distribución de Usuarios</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="usersPieChart"></canvas>
+            </div>
+            <div class="pie-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #4e73df;"></span>
+                    <span class="legend-label">Clientes</span>
+                    <span class="legend-value">{{ customers_count }}</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #1cc88a;"></span>
+                    <span class="legend-label">Restaurantes</span>
+                    <span class="legend-value">{{ restaurants_count }}</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #36b9cc;"></span>
+                    <span class="legend-label">Administradores</span>
+                    <span class="legend-value">{{ admins_count }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-row">
+        <div class="table-card">
+            <div class="card-header">
+                <h3>Últimos Pedidos</h3>
+                <a href="{% url 'admin_orders' %}" class="view-all-link">Ver todos <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Clave</th>
+                            <th>Restaurante</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td>{{ order.order_key }}</td>
+                            <td>{{ order.restaurant_name }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.dateTime|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <span class="status-badge status-{{ order.state }}">
+                                    {% if order.state == "pending" %}
+                                        Pendiente
+                                    {% elif order.state == "processing" %}
+                                        En proceso
+                                    {% elif order.state == "ready" %}
+                                        Listo
+                                    {% elif order.state == "completed" %}
+                                        Completado
+                                    {% elif order.state == "cancelled" %}
+                                        Cancelado
+                                    {% else %}
+                                        {{ order.state|title }}
+                                    {% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="activity-card">
+            <div class="card-header">
+                <h3>Actividad Reciente</h3>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Nuevo usuario registrado</p>
+                        <p class="activity-time">Hace 5 minutos</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Nueva caja registrada</p>
+                        <p class="activity-time">Hace 2 horas</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Pedido #A45B2C completado</p>
+                        <p class="activity-time">Hace 3 horas</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Nuevo restaurante registrado</p>
+                        <p class="activity-time">Hace 1 día</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Actualización del sistema</p>
+                        <p class="activity-time">Hace 2 días</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Mostrar fecha actual
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', options);
+    
+    // Gráfico de pedidos
+    const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+    const ordersChart = new Chart(ordersCtx, {
+        type: 'line',
+        data: {
+            labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+            datasets: [{
+                label: 'Pedidos',
+                data: [15, 22, 18, 24, 32, 38, 28],
+                borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+    
+    // Gráfico de usuarios
+    const usersCtx = document.getElementById('usersPieChart').getContext('2d');
+    // Gráfico de usuarios
+    // Gráfico de usuarios
+    // Gráfico de usuarios
+
+    // Obtenemos los valores directamente desde los elementos HTML de la leyenda
+    const customerCountElement = document.querySelector('.legend-item:nth-child(1) .legend-value');
+    const restaurantCountElement = document.querySelector('.legend-item:nth-child(2) .legend-value');
+    const adminCountElement = document.querySelector('.legend-item:nth-child(3) .legend-value');
+
+    // Convertimos a números, si no es un número válido usamos 0
+    const customerCount = parseInt(customerCountElement.textContent) || 0;
+    const restaurantCount = parseInt(restaurantCountElement.textContent) || 0;
+    const adminCount = parseInt(adminCountElement.textContent) || 0;
+
+    // Creamos el gráfico con los datos obtenidos
+    const usersPieChart = new Chart(usersCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Clientes', 'Restaurantes', 'Administradores'],
+            datasets: [{
+                data: [customerCount, restaurantCount, adminCount],
+                backgroundColor: [
+                    '#4e73df',
+                    '#1cc88a',
+                    '#36b9cc'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // Cambiar datos del gráfico según el rango seleccionado
+    document.getElementById('ordersChartRange').addEventListener('change', function() {
+        const range = this.value;
+        let data;
+        let labels;
+        
+        switch(range) {
+            case 'week':
+                labels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+                data = [15, 22, 18, 24, 32, 38, 28];
+                break;
+            case 'month':
+                labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'];
+                data = [78, 92, 110, 85];
+                break;
+            case 'quarter':
+                labels = ['Ene', 'Feb', 'Mar'];
+                data = [280, 325, 365];
+                break;
+        }
+        
+        ordersChart.data.labels = labels;
+        ordersChart.data.datasets[0].data = data;
+        ordersChart.update();
+    });
+</script>
+{% endblock %}

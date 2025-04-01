@@ -24,9 +24,6 @@
             {% if user %}
                 {% if user.role == "elmarro" %}
                     <li><a href="{% url 'admin_panel' %}">Panel Administrador</a></li>
-                    <li><a href="{% url 'boxes' %}">Pedidos</a></li>
-                    <li><a href="{% url 'users' %}">Usuarios</a></li>
-                    <li><a href="{% url 'boxes_list' %}">Contenedores</a></li>
                 {% elif user.role == "restaurante" %}
                     <li><a href="{% url 'restaurant_boxes' %}">Administración</a></li>
                     <li><a href="{% url 'add_order' %}">Nuevo Pedido</a></li>
@@ -51,11 +48,8 @@
             {% if user %}
                 {% if user.role == "elmarro" %}
                     <li><a href="{% url 'admin_panel' %}">Panel Administrador</a></li>
-                    <li><a href="{% url 'boxes' %}">Pedidos</a></li>
-                    <li><a href="{% url 'users' %}">Usuarios</a></li>
-                    <li><a href="{% url 'boxes_list' %}">Contenedores</a></li>
                 {% elif user.role == "restaurante" %}
-                    <li><a href="{% url 'restaurant_panel' %}">Administración</a></li>
+                    <li><a href="{% url 'restaurant_boxes' %}">Administración</a></li>
                     <li><a href="{% url 'add_order' %}">Nuevo Pedido</a></li>
                 {% elif user.role == "cliente" %}
                     <li><a href="{% url 'user_orders' %}">Mis Pedidos</a></li>

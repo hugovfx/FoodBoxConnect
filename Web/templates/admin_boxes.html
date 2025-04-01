@@ -1,0 +1,264 @@
+{% extends 'admin_panel.html' %}
+
+{% load static %}
+
+{% block linksA %}
+<link rel="stylesheet" href="{% static 'css/admin_boxes_list.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="section-header">
+    <h2><i class="fa-solid fa-boxes-stacked"></i> Administración de Cajas</h2>
+    <p>Total de cajas: {{ boxes|length }}</p>
+</div>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar por serie, nombre o modelo...">
+    <button id="searchButton"><i class="fa-solid fa-search"></i></button>
+</div>
+
+<div class="status-filters">
+    <button class="status-filter active" data-status="all">Todas</button>
+    <button class="status-filter" data-status="active">Activas</button>
+    <button class="status-filter" data-status="inactive">Inactivas</button>
+</div>
+
+<div class="boxes-container">
+    {% if not boxes %}
+        <p class="no-results">No hay cajas registradas.</p>
+    {% else %}
+        {% for box in boxes %}
+        <div class="box-card" data-status="{{ box.state }}" data-serie="{{ box.serie }}">
+            <div class="box-header">
+                <div class="box-title">
+                    <span class="box-name">{{ box.name }}</span>
+                    <span class="box-serie">{{ box.serie }}</span>
+                </div>
+                <div class="box-status-container">
+                    <span class="box-status status-{{ box.state }}">{{ box.state|title }}</span>
+                    <span class="box-online {% if box.on %}online{% else %}offline{% endif %}">
+                        <i class="fa-solid fa-wifi"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="box-info">
+                <p><i class="fa-solid fa-microchip input-icon"></i> Modelo: <strong>{{ box.model }}</strong></p>
+                <p><i class="fa-solid fa-location-dot input-icon"></i> Posición: <strong>{{ box.position }}</strong></p>
+                {% if box.temperatura %}
+                <p><i class="fa-solid fa-temperature-half input-icon"></i> Temperatura: <strong>{{ box.temperatura }}°C</strong></p>
+                {% endif %}
+                <p><i class="fa-solid fa-calendar-alt input-icon"></i> Registrada: <strong>{{ box.registration_date|date:"d/m/Y H:i" }}</strong></p>
+                {% if box.last_update %}
+                <p><i class="fa-solid fa-clock input-icon"></i> Última actualización: <strong>{{ box.last_update|date:"d/m/Y H:i" }}</strong></p>
+                {% endif %}
+            </div>
+            
+            <div class="box-actions">
+                <button class="edit-button" 
+                        data-serie="{{ box.serie }}" 
+                        data-name="{{ box.name }}" 
+                        data-position="{{ box.position }}" 
+                        data-model="{{ box.model }}" 
+                        data-state="{{ box.state }}" 
+                        data-on="{{ box.on }}"
+                        onclick="editBoxFromButton(this)">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                </button>
+                <button class="view-button" onclick="viewBoxDetails('{{ box.serie }}')">
+                    <i class="fa-solid fa-eye"></i> Ver detalles
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Modal de edición -->
+<div id="editBoxModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeEditModal()">&times;</span>
+        <h2>Editar Caja</h2>
+        <form action="" method="POST" id="editBoxForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="serie"><i class="fa-solid fa-fingerprint input-icon"></i> Serie</label>
+                <input type="text" id="editSerie" name="serie" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name"><i class="fa-solid fa-tag input-icon"></i> Nombre</label>
+                <input type="text" id="editName" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="model"><i class="fa-solid fa-microchip input-icon"></i> Modelo</label>
+                <input type="text" id="editModel" name="model" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label for="position"><i class="fa-solid fa-map-marker-alt input-icon"></i> Posición</label>
+                <input type="text" id="editPosition" name="position" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="state"><i class="fa-solid fa-toggle-on input-icon"></i> Estado</label>
+                <select id="editState" name="state" class="form-control" required>
+                    <option value="active">Activa</option>
+                    <option value="inactive">Inactiva</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-wifi input-icon"></i> Conectividad</label>
+                <div class="toggle-container">
+                    <input type="checkbox" id="editOn" name="on" class="toggle-input">
+                    <label for="editOn" class="toggle-label"></label>
+                    <span id="onStatus">Encendida</span>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="save-button"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                <button type="button" class="cancel-button" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de detalles -->
+<div id="detailsBoxModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeDetailsModal()">&times;</span>
+        <h2>Detalles de la Caja</h2>
+        <div id="boxDetailsContent">
+            <!-- El contenido se llenará dinámicamente -->
+        </div>
+        <div class="form-actions">
+            <button class="cancel-button" onclick="closeDetailsModal()"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funciones para el modal de edición
+    function openEditModal(serie, name, position, model, state, on) {
+        document.getElementById('editBoxForm').action = "/boxes_list/edit/" + serie + "/";
+        document.getElementById('editSerie').value = serie;
+        document.getElementById('editName').value = name;
+        document.getElementById('editPosition').value = position;
+        document.getElementById('editModel').value = model;
+        document.getElementById('editState').value = state;
+        document.getElementById('editOn').checked = on;
+        document.getElementById('onStatus').textContent = on ? 'Encendida' : 'Apagada';
+        document.getElementById('editBoxModal').style.display = 'block';
+    }
+    
+    // Actualizar el texto según el estado del toggle
+    document.getElementById('editOn').addEventListener('change', function() {
+        document.getElementById('onStatus').textContent = this.checked ? 'Encendida' : 'Apagada';
+    });
+    
+    function closeEditModal() {
+        document.getElementById('editBoxModal').style.display = 'none';
+    }
+    
+    // Funciones para el modal de detalles
+    function viewBoxDetails(serie) {
+        // Buscar la caja correspondiente en el DOM
+        const boxCard = document.querySelector(`.box-card[data-serie="${serie}"]`);
+        
+        if (!boxCard) {
+            // Si no se encuentra en el DOM, mostraremos un mensaje
+            document.getElementById('boxDetailsContent').innerHTML = `
+                <p>Serie: <strong>${serie}</strong></p>
+                <p>Se requiere cargar información adicional del servidor...</p>
+            `;
+        } else {
+            // Extraer datos del DOM
+            const boxName = boxCard.querySelector('.box-name').textContent;
+            const boxState = boxCard.querySelector('.box-status').textContent;
+            const isOnline = boxCard.querySelector('.box-online').classList.contains('online');
+            const info = boxCard.querySelector('.box-info').innerHTML;
+            
+            let content = `
+                <div class="detail-section">
+                    <h3>Información General</h3>
+                    <p><strong>Nombre:</strong> ${boxName}</p>
+                    <p><strong>Serie:</strong> ${serie}</p>
+                    <p><strong>Estado:</strong> ${boxState}</p>
+                    <p><strong>Conectividad:</strong> ${isOnline ? 'En línea' : 'Fuera de línea'}</p>
+                </div>
+                <div class="detail-section">
+                    <h3>Detalles Técnicos</h3>
+                    ${info}
+                </div>
+            `;
+            
+            document.getElementById('boxDetailsContent').innerHTML = content;
+        }
+        
+        document.getElementById('detailsBoxModal').style.display = 'block';
+    }
+    
+    function closeDetailsModal() {
+        document.getElementById('detailsBoxModal').style.display = 'none';
+    }
+    
+    // Búsqueda de cajas
+    document.getElementById('searchButton').addEventListener('click', function() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const boxCards = document.querySelectorAll('.box-card');
+        
+        boxCards.forEach(function(card) {
+            const boxName = card.querySelector('.box-name').textContent.toLowerCase();
+            const boxSerie = card.querySelector('.box-serie').textContent.toLowerCase();
+            const boxModel = card.querySelector('.box-info p:nth-child(1)').textContent.toLowerCase();
+            
+            if (boxName.includes(searchText) || boxSerie.includes(searchText) || boxModel.includes(searchText)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+    
+    // Enter para buscar
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('searchButton').click();
+        }
+    });
+    
+    // Filtros de estado
+    const statusFilters = document.querySelectorAll('.status-filter');
+    statusFilters.forEach(function(filter) {
+        filter.addEventListener('click', function() {
+            const status = this.getAttribute('data-status');
+            const boxCards = document.querySelectorAll('.box-card');
+            
+            // Actualizar botones activos
+            statusFilters.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Mostrar/ocultar tarjetas según el estado
+            if (status === 'all') {
+                boxCards.forEach(card => card.style.display = 'block');
+            } else {
+                boxCards.forEach(function(card) {
+                    if (card.getAttribute('data-status') === status) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
+
+    function editBoxFromButton(button) {
+    const serie = button.getAttribute('data-serie');
+    const name = button.getAttribute('data-name');
+    const position = button.getAttribute('data-position');
+    const model = button.getAttribute('data-model');
+    const state = button.getAttribute('data-state');
+    const on = button.getAttribute('data-on') === 'True'; // Convierte string a boolean
+    
+    openEditModal(serie, name, position, model, state, on);
+}
+</script>
+{% endblock %}

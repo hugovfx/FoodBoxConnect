@@ -25,15 +25,20 @@
                     <div class="order-info">
                         <p>Nip</p>
                         <div style="display: flex; flex-direction: row;">
-                            <i class="fas fa-check-circle icon"></i>
-                            <input type="password" class="order-status" value="{{ order.key }}" readonly style="border: 0px; width: 56px;">
+                            <i class="fa-solid fa-lock icon"></i>
+                            <input type="text" class="order-status" value="{{ order.box_key }}" readonly style="border: 0px;">
                         </div>
                     </div>
                     <div class="order-info">
                         <p>Estado</p>
                         <div style="display: flex; flex-direction: row;">
                             <i class="fas fa-check-circle icon"></i>
-                            <span class="order-status">{{ order.state }}</span>
+                            {% if order.state == "pending" %}
+                            <span class="order-status">Pendiente</span>
+                            {% endif %}
+                            {% if order.state == "completado" %}
+                            <span class="order-status">Completado</span>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="order-info">

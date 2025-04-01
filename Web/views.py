@@ -187,10 +187,37 @@ def orders(request):
     return render(request, "orders.html", {"user": user});
 
 #-------------------------------- RUTA PROFILE --------------------------------#
+from django.shortcuts import render, redirect
+from bson import ObjectId
+
+from django.shortcuts import render, redirect
+from bson import ObjectId
+
+from django.shortcuts import render, redirect
+from bson import ObjectId
+
 def profile(request):
     user = request.session.get("user")
-    user = users_collection.find_one({"email":user["email"]})
+    if not user:
+        return redirect("login")  # Redirige si no hay sesión activa
+
+    user = users_collection.find_one({"email": user["email"]})
+
+    if request.method == "POST":
+        new_name = request.POST["name"]
+        new_phone = request.POST["phone"]
+        new_address = request.POST["address"]
+
+        users_collection.update_one(
+            {"_id": ObjectId(user["_id"])},
+            {"$set": {"name": new_name, "phone": new_phone, "address": new_address}}
+        )
+        return redirect("profile")  # Refresca la página después de actualizar
+
     return render(request, "profile.html", {"user": user})
+
+
+
 
 #accesos y restricciones 
 #   RESTAURATES
@@ -206,22 +233,34 @@ def restaurant_boxes(request):
     if not user or user["role"] != "restaurante":
         return redirect("home")  # Solo restaurantes pueden ver esto
     
-    user = users_collection.find_one({"email":user["email"]})
+    user = users_collection.find_one({"email": user["email"]})
     boxes = list(boxes_collection.find({"id_owner": ObjectId(user['_id'])}))
-    
-    if request.method == "POST":
-        name = request.POST["name"]
-        position = request.POST["position"]
-        user_id = ObjectId(user['_id'])
-        serie = request.POST["serie"]
 
-        boxes_collection.update_one(
-            {"id_owner": user_id , "serie": serie},
-            {"$set": {"name": name, "position": position}}
-        )
+    if request.method == "POST":
+        serie = request.POST.get("serie")
+
+        if "toggle" in request.POST:
+            # Obtener el estado actual
+            box = boxes_collection.find_one({"id_owner": ObjectId(user['_id']), "serie": serie})
+            new_status = not box.get("on", False)  # Cambia el estado
+            boxes_collection.update_one(
+                {"id_owner": ObjectId(user['_id']), "serie": serie},
+                {"$set": {"on": new_status}}
+            )
+        else:
+            # Actualizar los otros datos de la caja
+            name = request.POST["name"]
+            position = request.POST["position"]
+
+            boxes_collection.update_one(
+                {"id_owner": ObjectId(user['_id']), "serie": serie},
+                {"$set": {"name": name, "position": position}}
+            )
         
         return redirect("restaurant_boxes")
-    return render(request, "restaurant_boxes.html", {"user": user, "boxes":boxes})
+
+    return render(request, "restaurant_boxes.html", {"user": user, "boxes": boxes})
+
 
 def restaurant_addBox(request):
     user = request.session.get("user")
@@ -242,11 +281,11 @@ def restaurant_addBox(request):
         new_box = {
             "name": name,
             "model": model,
-            "box_key": "none",
-            "state": "Apagado",
+            "state": "inactive",
             "serie": serie,
             "position": position,
-            "dateTime": datetime.now(),
+            "on": 0,
+            "registration_date": datetime.now(),
             "id_owner": ObjectId(user['_id'])
         }
         boxes_collection.insert_one(new_box)
@@ -278,10 +317,10 @@ def restaurant_orders(request):
     return render(request, "restaurant_orders.html", {"user": user, "orders":orders})
 
 def generate_order_key():
-    values = "1234567890ABCD"
+    values = "1234560AB"
     orden = ""
     for i in range(9):
-        numero = random.randint(0, 13);
+        numero = random.randint(0, 8);
         orden += values[numero]
     return orden
 
@@ -294,12 +333,17 @@ def add_order(request):
     user = users_collection.find_one({"email": user["email"]})
 
     # Obtener todas las cajas del restaurante
-    cajas = list(boxes_collection.find({"id_owner": user["_id"]}))
+    cajas = list(boxes_collection.find({"id_owner": user["_id"], "on":True}))
+    users = list(users_collection.find({"role": "cliente"}))
 
     if request.method == "POST":
         serie = request.POST["serie"]  # Se almacena la serie de la caja
         details = request.POST["details"]
         state = request.POST["state"]
+        usuario = request.POST["usuario"] 
+
+        if usuario != "none":
+            usuario = users_collection.find_one({"email":usuario})
 
         id_box = boxes_collection.find_one({"serie":serie})
 
@@ -308,7 +352,9 @@ def add_order(request):
             order_key = generate_order_key()  # Generar clave única
             if not orders_collection.find_one({"order_key":order_key}):
                 generar = False
-            
+        
+        box_key = generate_order_key()
+        
 
         dateTime = datetime.now()  # Fecha y hora actuales
 
@@ -318,13 +364,15 @@ def add_order(request):
             "details": details,
             "state": state,
             "dateTime": dateTime,
-            "id_owner": ObjectId(user["_id"])
+            "id_owner": ObjectId(user["_id"]),
+            "id_customer": ObjectId(usuario["_id"]),
+            "box_key":box_key
         }
 
         orders_collection.insert_one(new_order)
-        redirect ('add_order')
+        return redirect ('restaurant_orders')
 
-    return render(request, "new_order.html", {"user": user, "cajas": cajas})
+    return render(request, "new_order.html", {"user": user, "cajas": cajas, "users":users})
 
 
 
@@ -348,7 +396,7 @@ def user_orders(request):
 
     user = users_collection.find_one({"email": user["email"]})
 
-    orders = list(orders_collection.find({"user_id": ObjectId(user["_id"])}))
+    orders = list(orders_collection.find({"id_customer": ObjectId(user["_id"])}))
 
     for order in orders:
         box = boxes_collection.find_one({"_id": order.get("id_box")})  # Buscar la caja
@@ -358,24 +406,58 @@ def user_orders(request):
     return render(request, "user_orders.html", {"user": user, "orders": orders})
 
 
-#   ADMIN
+#ADMIN
 def admin_dashboard(request):
     user = request.session.get("user")
 
     if not user or user["role"] != "elmarro":
         return redirect("home")  # Redirige si no es admin
+    
+    # Conteo de usuarios por tipo
+    customers_count = users_collection.count_documents({"role": "cliente"})
+    restaurants_count = users_collection.count_documents({"role": "restaurante"})
+    admins_count = users_collection.count_documents({"role": "elmarro"})
+    
+    # Conteo total
+    users_count = customers_count + restaurants_count + admins_count
+    boxes_count = boxes_collection.count_documents({})
+    orders_count = orders_collection.count_documents({})
+    
+    # Obtener pedidos recientes
+    recent_orders = list(orders_collection.find().sort("dateTime", -1).limit(5))
+    
+    # Enriquecer los datos de pedidos con nombres de restaurantes y clientes
+    for order in recent_orders:
+        # Obtener nombre del restaurante
+        restaurant = users_collection.find_one({"_id": order.get("id_owner")})
+        order["restaurant_name"] = restaurant.get("name", "Desconocido") if restaurant else "Desconocido"
+        
+        # Obtener nombre del cliente
+        customer = users_collection.find_one({"_id": order.get("id_customer")})
+        order["customer_name"] = customer.get("name", "Desconocido") if customer else "Desconocido"
+    
+    context = {
+        "user": user,
+        "customers_count": customers_count,
+        "restaurants_count": restaurants_count,
+        "admins_count": admins_count,
+        "users_count": users_count,
+        "boxes_count": boxes_count,
+        "orders_count": orders_count,
+        "recent_orders": recent_orders
+    }
+    
+    return render(request, "admin_dashboard.html", context)
 
-    return render(request, "admin_dashboard.html", {"user": user})
-
-def users_list(request):
+def admin_users(request):
     user = request.session.get("user")
-
+    
     if not user or user["role"] != "elmarro":
         return redirect("home")  # Redirige si no es admin
     
-    usuarios = users_collection.find()  
-    usuarios_info = [{"name": usuario["name"], "lastname": usuario["lastname"], "phone": usuario["phone"], "address": usuario["address"], "email": usuario["email"], "role": usuario["role"]} for usuario in usuarios]
-    return render(request, "users_list.html", {"usuarios": usuarios_info, "user": user})
+    users = list(users_collection.find())
+    
+    return render(request, "admin_users.html", {"user": user, "usuarios": users})
 
 def editar_usuario(request, email):
     user = request.session.get("user")
@@ -384,17 +466,18 @@ def editar_usuario(request, email):
         return redirect("home")  # Redirige si no es admin
     
     if request.method == "POST":
-        user = users_collection.find_one({"email": email})
+        usuario = users_collection.find_one({"email": email})
 
-        if not user:
-            return redirect("users")
+        if not usuario:
+            return redirect("admin_users")  # Si no encuentra al usuario, redirige
 
         nuevo_nombre = request.POST["name"]
-        nuevo_apellido = request.POST["lastname"]
+        nuevo_apellido = request.POST.get("lastname", "")  # Usando .get para manejar campos opcionales
         nuevo_telefono = request.POST["phone"]
         nueva_direccion = request.POST["address"]
         nuevo_rol = request.POST["role"]
 
+        # Actualizar el usuario en la base de datos
         users_collection.update_one(
             {"email": email},
             {"$set": {
@@ -405,8 +488,125 @@ def editar_usuario(request, email):
                 "role": nuevo_rol
             }}
         )
-        return redirect("users") 
-    return redirect("users") 
+        
+        return redirect("admin_users")  # Redirige a la lista de usuarios después de editar
+        
+    # Si es una solicitud GET, redirige a la lista de usuarios
+    return redirect("admin_users")
+
+def admin_boxes(request):
+    user = request.session.get("user")
+    
+    if not user or user["role"] != "elmarro":
+        return redirect("home")  # Redirige si no es admin
+    
+    # Obtener todas las cajas con sus datos completos
+    boxes = list(boxes_collection.find())
+    
+    # Convertir ObjectId a string para un manejo más sencillo en la plantilla
+    for box in boxes:
+        if 'id_owner' in box and box['id_owner']:
+            # Obtener el nombre del propietario (restaurante) si existe
+            owner = users_collection.find_one({"_id": box['id_owner']})
+            if owner:
+                box['owner_name'] = owner.get('name', 'Sin asignar')
+            else:
+                box['owner_name'] = 'Sin asignar'
+        else:
+            box['owner_name'] = 'Sin asignar'
+    
+    return render(request, "admin_boxes.html", {"user": user, "boxes": boxes})
+
+def admin_orders(request):
+    user = request.session.get("user")
+    
+    if not user or user["role"] != "elmarro":
+        return redirect("home")  # Redirige si no es admin
+    
+    # Obtener todos los restaurantes para el filtro
+    restaurants = list(users_collection.find({"role": "restaurante"}))
+    
+    # Obtener todos los pedidos ordenados por fecha más reciente
+    orders = list(orders_collection.find().sort("dateTime", -1))
+    
+    # Enriquecer los datos de pedidos con información adicional
+    for order in orders:
+        # Obtener datos del restaurante
+        restaurant = users_collection.find_one({"_id": order.get("id_owner")})
+        order["restaurant_name"] = restaurant.get("name", "Desconocido") if restaurant else "Desconocido"
+        
+        # Obtener datos del cliente
+        customer = users_collection.find_one({"_id": order.get("id_customer")})
+        order["customer_name"] = customer.get("name", "Desconocido") if customer else "Desconocido"
+        
+        # Obtener datos de la caja
+        box = boxes_collection.find_one({"_id": order.get("id_box")})
+        order["box_position"] = box.get("position", "Desconocida") if box else "Desconocida"
+        
+        # Si no hay estado definido, usar "pendiente" como predeterminado
+        if "state" not in order or not order["state"]:
+            order["state"] = "pendiente"
+            
+        # Procesar logs de temperatura
+        if 'temperature_logs' in order and order['temperature_logs'] and len(order['temperature_logs']) > 0:
+            last_temp = order['temperature_logs'][-1]  # Obtiene el último registro
+            order['last_temperature_value'] = last_temp.get('value', 'N/A')
+            order['last_temperature_timestamp'] = last_temp.get('timestamp', 'N/A')
+        else:
+            order['last_temperature_value'] = None
+            order['last_temperature_timestamp'] = None
+            
+        # Procesar logs de acceso
+        if 'access_logs' in order and order['access_logs'] and len(order['access_logs']) > 0:
+            last_access = order['access_logs'][-1]  # Obtiene el último acceso
+            order['last_access_timestamp'] = last_access.get('timestamp', 'N/A')
+            order['last_access_success'] = last_access.get('success', False)
+        else:
+            order['last_access_timestamp'] = None
+            order['last_access_success'] = None
+    
+    return render(request, "admin_orders.html", {
+        "user": user, 
+        "orders": orders,
+        "restaurants": restaurants
+    })
+
+def admin_update_order(request, order_key):
+    user = request.session.get("user")
+    
+    if not user or user["role"] != "elmarro":
+        return redirect("home")  # Redirige si no es admin
+    
+    if request.method == "POST":
+        details = request.POST.get("details")
+        state = request.POST.get("state")
+        
+        # Validar estado
+        valid_states = ["pendiente", "en-proceso", "listo", "completado", "cancelado"]
+        if state not in valid_states:
+            state = "pendiente"  # Estado predeterminado si no es válido
+        
+        # Ajustar formato si es necesario
+        if state == "en-proceso":
+            state = "en proceso"
+            
+        update_data = {
+            "details": details,
+            "state": state
+        }
+        
+        # Si se marca como completado, registrar la fecha de entrega
+        if state == "completado":
+            update_data["delivery_date"] = datetime.now()
+        
+        orders_collection.update_one(
+            {"order_key": order_key},
+            {"$set": update_data}
+        )
+        
+        return redirect("admin_orders")
+    
+    return redirect("admin_orders")
 
 #-------------------------------- RUTA ELIMINAR USUARIO --------------------------------#
 
@@ -424,7 +624,7 @@ def eliminar_usuario(request, email):
         
         users_collection.delete_one({"email": email})
 
-    return redirect("users")
+    return redirect("admin_users")
 
 #-------------------------------- RUTA BOXES --------------------------------#
 def boxes(request):
@@ -438,7 +638,6 @@ def boxes(request):
         address = request.POST["address"]
         model = request.POST["model"]
         details = request.POST["details"]
-        ability = request.POST["ability"]
 
         while(flag):
             key = randomboxkey()
@@ -455,7 +654,6 @@ def boxes(request):
             "address": address,
             "model": model,
             "details": details,
-            "ability": ability,
         }
         boxes_collection.insert_one(new_box)   
         return redirect("boxes") 
@@ -494,31 +692,42 @@ def boxes_list(request):
                    } for box in boxes]
     return render(request, "boxes_list.html", {"boxes": boxes_info, "user": user})
 
-def box_update(request, key):
+def box_update(request, serie):
     user = request.session.get("user")
 
     if not user or user["role"] != "elmarro":
         return redirect("home")  # Redirige si no es admin
     
     if request.method == "POST":
-        box = boxes_collection.find_one({"key": key})
+        box = boxes_collection.find_one({"serie": serie})
 
+        if not box:
+            return redirect("admin_boxes")  # Si no encuentra la caja, redirige
+
+        # Obtener los valores del formulario
+        new_name = request.POST["name"]
+        new_position = request.POST["position"]
         new_state = request.POST["state"]
-        new_address = request.POST["address"]
-        new_details = request.POST["details"]
-        new_ability = request.POST["ability"]
+        new_on = 'on' in request.POST  # Checkbox, estará presente solo si está marcado
 
+        # Actualizar la caja en la base de datos
+        update_data = {
+            "name": new_name,
+            "position": new_position,
+            "state": new_state,
+            "on": new_on,
+            "last_update": datetime.now()
+        }
+        
         boxes_collection.update_one(
-            {"key": key},
-            {"$set": {
-                "state": new_state,
-                "address": new_address,
-                "details": new_details,
-                "ability": new_ability,
-            }}
+            {"serie": serie},
+            {"$set": update_data}
         )
-        return redirect("boxes_list")
-    return redirect("boxes_list") 
+        
+        return redirect("admin_boxes")  # Redirige a la lista de cajas después de editar
+        
+    # Si es una solicitud GET, redirige a la lista de cajas
+    return redirect("admin_boxes")
 
 def admin_panel(request):
     user = request.session.get("user")

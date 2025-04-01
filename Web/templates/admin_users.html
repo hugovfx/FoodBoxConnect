@@ -1,0 +1,192 @@
+{% extends 'admin_panel.html' %}
+
+{% load static %}
+
+{% block linksA %}
+<link rel="stylesheet" href="{% static 'css/admin_users_list.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="section-header">
+    <h2><i class="fa-solid fa-users"></i> Administración de Usuarios</h2>
+    <p>Total de usuarios: {{ usuarios|length }}</p>
+</div>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar por nombre, email o rol...">
+    <button id="searchButton"><i class="fa-solid fa-search"></i></button>
+</div>
+
+<div class="role-filters">
+    <button class="role-filter active" data-role="all">Todos</button>
+    <button class="role-filter" data-role="cliente">Clientes</button>
+    <button class="role-filter" data-role="restaurante">Restaurantes</button>
+    <button class="role-filter" data-role="elmarro">Administradores</button>
+</div>
+
+<div class="users-container">
+    {% if not usuarios %}
+        <p class="no-results">No hay usuarios registrados.</p>
+    {% else %}
+        {% for usuario in usuarios %}
+        <div class="user-card" data-role="{{ usuario.role }}">
+            <div class="user-card-header">
+                <h3>{{ usuario.name }} {{ usuario.lastname }}</h3>
+                {% if usuario.role == "elmarro" %}
+                <span class="user-role role-{{ usuario.role }}">Admin</span>
+                {% else %}
+                <span class="user-role role-{{ usuario.role }}">{{ usuario.role|title }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="user-info">
+                <p><i class="fa-solid fa-envelope input-icon"></i> {{ usuario.email }}</p>
+                <p><i class="fa-solid fa-phone input-icon"></i> {{ usuario.phone }}</p>
+                <p><i class="fa-solid fa-location-dot input-icon"></i> {{ usuario.address }}</p>
+            </div>
+            
+            <div class="user-actions">
+                <button class="edit-button" onclick="openEditModal('{{ usuario.email }}', '{{ usuario.name }}', '{{ usuario.lastname }}', '{{ usuario.phone }}', '{{ usuario.address }}', '{{ usuario.role }}')">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                </button>
+                <button class="delete-button" onclick="confirmDelete('{{ usuario.email }}', '{{ usuario.name }}')">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Modal de edición -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeEditModal()">&times;</span>
+        <h2>Editar Usuario</h2>
+        <form action="" method="POST" id="editForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name"><i class="fa-solid fa-user input-icon"></i> Nombre</label>
+                <input type="text" id="editName" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="lastname"><i class="fa-solid fa-user input-icon"></i> Apellido</label>
+                <input type="text" id="editLastname" name="lastname" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="phone"><i class="fa-solid fa-phone input-icon"></i> Teléfono</label>
+                <input type="text" id="editPhone" name="phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="address"><i class="fa-solid fa-location-dot input-icon"></i> Dirección</label>
+                <input type="text" id="editAddress" name="address" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="role"><i class="fa-solid fa-user-tag input-icon"></i> Rol</label>
+                <select id="editRole" name="role" class="form-control" required>
+                    <option value="cliente">Cliente</option>
+                    <option value="restaurante">Restaurante</option>
+                    <option value="elmarro">Administrador</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="save-button"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                <button type="button" class="cancel-button" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeDeleteModal()">&times;</span>
+        <h2>Confirmar Eliminación</h2>
+        <p>¿Estás seguro de que deseas eliminar al usuario <strong id="deleteUserName"></strong>?</p>
+        <p class="warning-text">Esta acción no se puede deshacer.</p>
+        <div class="form-actions">
+            <a id="deleteLink" href="#" class="delete-confirm-button"><i class="fa-solid fa-trash"></i> Eliminar</a>
+            <button class="cancel-button" onclick="closeDeleteModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funciones para el modal de edición
+    function openEditModal(email, name, lastname, phone, address, role) {
+        document.getElementById('editForm').action = "/editar_usuario/" + email + "/";
+        document.getElementById('editName').value = name;
+        document.getElementById('editLastname').value = lastname;
+        document.getElementById('editPhone').value = phone;
+        document.getElementById('editAddress').value = address;
+        document.getElementById('editRole').value = role;
+        document.getElementById('editModal').style.display = 'block';
+    }
+    
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+    
+    // Funciones para el modal de eliminación
+    function confirmDelete(email, name) {
+        document.getElementById('deleteUserName').textContent = name;
+        document.getElementById('deleteLink').href = "/eliminar_usuario/" + email + "/";
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    
+    // Búsqueda de usuarios
+    document.getElementById('searchButton').addEventListener('click', function() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const userCards = document.querySelectorAll('.user-card');
+        
+        userCards.forEach(function(card) {
+            const userName = card.querySelector('h3').textContent.toLowerCase();
+            const userEmail = card.querySelector('.user-info p:nth-child(1)').textContent.toLowerCase();
+            const userRole = card.getAttribute('data-role').toLowerCase();
+            
+            if (userName.includes(searchText) || userEmail.includes(searchText) || userRole.includes(searchText)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+    
+    // Enter para buscar
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('searchButton').click();
+        }
+    });
+    
+    // Filtros de rol
+    const roleFilters = document.querySelectorAll('.role-filter');
+    roleFilters.forEach(function(filter) {
+        filter.addEventListener('click', function() {
+            const role = this.getAttribute('data-role');
+            const userCards = document.querySelectorAll('.user-card');
+            
+            // Actualizar botones activos
+            roleFilters.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Mostrar/ocultar tarjetas según el rol
+            if (role === 'all') {
+                userCards.forEach(card => card.style.display = 'block');
+            } else {
+                userCards.forEach(function(card) {
+                    if (card.getAttribute('data-role') === role) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

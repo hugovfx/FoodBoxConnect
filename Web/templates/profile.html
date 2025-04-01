@@ -1,25 +1,41 @@
 {% extends 'plantilla.html' %}
-    
+
 {% load static %}
 
-{% block title %}Perfil {{user.name}}{% endblock %} 
+{% block title %}Perfil {{user.name}}{% endblock %}
 
 {% block links %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="main-content">
     <div class="card">
         <p class="wave">
-            {% for letra in user.name %}<span>{{letra}}</span>{% endfor %}
+            {% for letra in user.name %}<span>{{ letra }}</span>{% endfor %}
         </p>
-        <p>{{user.email}}</p>
-        <p>{{user.phone}}</p>
-        <p>{{user.address}}</p>
-        <a href="{% url 'register' %}">Registra un restaurante</a>
-    </div>
-    
-</div>
+        <p><i class="fa-solid fa-envelope"></i> {{ user.email }}</p>
+        <p><i class="fa-solid fa-phone"></i> {{ user.phone }}</p>
+        <p><i class="fa-solid fa-map-marker-alt"></i> {{ user.address }}</p>
 
+        <!-- Formulario de edición -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="name" placeholder="Nuevo nombre" value="{{ user.name }}" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-phone"></i>
+                <input type="text" name="phone" placeholder="Nuevo teléfono" value="{{ user.phone }}" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-map-marker-alt"></i>
+                <input type="text" name="address" placeholder="Nueva dirección" value="{{ user.address }}" required>
+            </div>
+            <button type="submit"><i class="fa-solid fa-save"></i> Actualizar</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'plantilla.html' %}
+
+{% load static %}
+
+{% block title %}
+    Panel de Administración
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/admin_panel.css' %}">
+    {% block linksA %}
+
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="contenedor-principal">
+    <div class="panel-administracion">
+        <nav class="barra-lateral">
+            <a class="enlace-navegacion" href="{% url 'admin_users' %}">
+                <i class="fa-solid fa-users"></i> <strong>Usuarios</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="{% url 'admin_boxes' %}">
+                <i class="fa-solid fa-boxes-stacked"></i> <strong>Cajas</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="{% url 'admin_orders' %}">
+                <i class="fa-solid fa-clipboard-list"></i> <strong>Pedidos</strong>
+            </a>
+            <hr>
+            <a class="enlace-navegacion" href="{% url 'admin_dashboard' %}">
+                <i class="fa-solid fa-chart-line"></i> <strong>Estadísticas</strong>
+            </a>
+        </nav>
+        <main class="contenido-administracion">
+            {% block contenido %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

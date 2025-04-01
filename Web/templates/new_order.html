@@ -12,6 +12,38 @@
     <form class="data" method="POST">
         {% csrf_token %}
 
+        <!-- Selección de Usuarios con Buscador -->
+        <div class="single-div">
+            <label for="usuario"><i class="fa-solid fa-user"></i> Seleccionar Usuario</label>
+            <div class="row-div">
+                <input type="text" id="searchUser" class="data-input" placeholder="Buscar usuario..." onkeyup="filtrarUsuarios()">
+                <select class="data-input" id="usuario" name="usuario" required>
+                    <option value="none">Anónimo</option>
+                    {% for usuario in users %}
+                        <option value="{{ usuario.email }}">{{ usuario.name }} {{ usuario.lastname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <script>
+            function filtrarUsuarios() {
+                let input = document.getElementById("searchUser").value.toLowerCase();
+                let select = document.getElementById("usuario");
+                let options = select.getElementsByTagName("option");
+
+                for (let i = 0; i < options.length; i++) {
+                    let texto = options[i].textContent.toLowerCase();
+                    if (texto.includes(input) || options[i].value === "none") {
+                        options[i].style.display = "block";
+                    } else {
+                        options[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+
         <!-- Selección de Caja -->
         <div class="single-div">
             <label for="serie"><i class="fa-solid fa-box"></i> Seleccionar Caja</label>
@@ -38,8 +70,7 @@
             <label for="state"><i class="fa-solid fa-info-circle"></i> Estado</label>
             <div class="row-div">
                 <select class="data-input" id="state" name="state" required>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="procesando">Procesando</option>
+                    <option value="pending">Pendiente</option>
                     <option value="completado">Completado</option>
                 </select>
             </div>
@@ -54,7 +85,7 @@
 
         <!-- Botón de enviar -->
         <button class="submit-button" type="submit">
-            <i class="fa-solid fa-paper-plane"></i> Registrar Pedido
+            Registrar Pedido
         </button>
     </form>
 </div>
