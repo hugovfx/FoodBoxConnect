@@ -1,0 +1,43 @@
+/* Estilos del icono de exclamación */
+.info-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: rgb(67, 67, 73);
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    top: -40px;
+}
+
+/* Tooltip (mensaje emergente) */
+.info-icon:hover::after {
+    content: "El numero de serie es proporcionado por el equipo de FoodBoxConnect al adquirir un nuevo modulo.";
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    transform: translateX(-50%);
+    width: 220px;
+    background-color: rgb(67, 67, 73);
+    color: #ebebeb;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    text-align: center;
+    white-space: normal;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+}
+
+@media screen and (min-width: 768px) {
+    .info-icon {
+        right: -130px;
+    }
+}

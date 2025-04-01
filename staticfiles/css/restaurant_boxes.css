@@ -1,0 +1,94 @@
+
+.box-card{
+    padding: 8px; 
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.216); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    border-radius: 1rem;
+    background-color: rgb(240, 240, 240);
+    margin: 10px;
+}
+
+.icon-wifi{
+    color: rgb(0, 102, 0); 
+    padding: 12px 10px; 
+    border-radius: 1rem; 
+    border: 1px solid green; 
+    background-color: rgb(180, 206, 180);
+}
+
+.icon-wifi-off{
+    color: rgb(202, 202, 202); 
+    padding: 12px 10px; 
+    border-radius: 1rem; 
+    border: 1px solid rgb(59, 59, 59); 
+    background-color: rgb(89, 89, 89);
+}
+
+.box-card div p{
+    margin-left: 8px;
+}
+
+form{
+    margin-left: 4px;
+}
+
+.div-input{
+    display: flex; 
+    flex-direction: row; 
+    border-radius: 1rem;
+    align-items: center;
+}
+
+.div-input input{
+    background-color: rgb(229, 229, 229); 
+    border-radius: .5rem;
+    padding: 4px;
+    text-align: center;
+    border: 0px;
+    margin-left: 5px;
+}
+
+.div-input input:focus {
+    outline: none;
+}
+
+.input-serie{
+    border: 0px;
+    background-color: rgb(229, 229, 229); 
+    text-align: center;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.input-serie:focus{
+    outline: none;
+
+}
+
+.div-input{
+    margin-left: 5px;
+}
+
+form label{
+    font-weight: 900;
+    color: rgb(35, 35, 83);
+}
+
+@media screen and (max-width: 767px) {
+    .box-card{
+        padding: 4px; 
+        width: 100%;
+    }
+    
+    .icon-wifi{ 
+        padding: 10px 8px; 
+        font-size: 14px;
+        border-radius: 1rem;
+    }
+    
+    .box-card div p{
+        margin-left: 4px;
+    }
+}

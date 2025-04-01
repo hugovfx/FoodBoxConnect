@@ -1,0 +1,138 @@
+/* Fondo animado con gradiente */
+body {
+    background-color: white;
+    margin: 0px;
+}
+
+a {
+    font-size: 18px;
+    font-weight: 100 !important;
+}
+
+/* Navbar en la parte superior */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    position: fixed;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.266);
+    top: 0; /* Cambiado de bottom a top */
+    background: #ffffff33;
+    padding: 16px 0px;
+    z-index: 100;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.navbar.scrolled {
+    background: rgb(248, 248, 248, .95);
+}
+
+.navbar ul {
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+/* Diseño para el contenido principal */
+.main-content {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    padding-top: 120px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.bottom-section {
+    background-color: rgb(42, 14, 72);
+    color: rgb(198, 174, 231);
+    padding: 50px 20px;
+    text-align: center;
+}
+
+/* Estilos para el menú lateral en móvil */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    transition: 0.3s;
+    z-index: 999;
+    padding-top: 60px;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar .close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Mostrar el menú lateral */
+.sidebar.open {
+    right: 0;
+}
+
+/* Estilo para el botón que activa el menú lateral */
+.menu-btn {
+    display: none;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+    /* Ocultar la barra de navegación en dispositivos móviles */
+    .navbar {
+        display: none;
+    }
+
+    /* Mostrar el botón de menú en dispositivos móviles */
+    .menu-btn {
+        display: block;
+    }
+}
