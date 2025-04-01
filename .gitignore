@@ -1,16 +1,66 @@
-# Ignorar archivos de entorno
+# Archivos de entorno y configuración
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Ignorar archivos de base de datos de Django
+# Base de datos SQLite
 db.sqlite3
+db.sqlite3-journal
 
-# Ignorar carpetas de dependencias de Python
+# Entornos virtuales de Python
 venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# Archivos de caché de Python
 __pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Ignorar archivos de compilación de Python
-*.pyc
-*.pyo
+# Archivos de configuración IDE/editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
 
-# Otros archivos que quieras ignorar
+# Archivos estáticos RECOPILADOS en producción
+/staticfiles/
+# NO ignorar los archivos estáticos de desarrollo
+# /static/
+
+# Archivos media subidos
+/media/
+
+# Archivos de compilación y distribución
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# Archivos de registro
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directorios específicos de Django
+local_settings.py
+db.json
+
+# Directorios y archivos temporales
+.tmp/
+.temp/
+*.bak
