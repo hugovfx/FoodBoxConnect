@@ -8,6 +8,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-m=vh#!fd!9u-9sl9a9q0)t)7pd
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+# Modificar para agregar dominio de render a la lista
 ALLOWED_HOSTS = ['foodboxconnect.onrender.com', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
@@ -19,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Web',
     'whitenoise.runserver_nostatic',  # Para servir archivos estáticos en producción
+    'rest_framework',  # Agregar si estás usando DRF
 ]
 
 MIDDLEWARE = [
@@ -71,5 +73,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "Web/static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_ALLOW_ALL_ORIGINS = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración para cors si es necesario
+# CORS_ALLOW_ALL_ORIGINS = True

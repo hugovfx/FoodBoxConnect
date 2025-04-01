@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: foodboxconnect
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn FoodBooxConnect.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: MONGODB_URI
+        sync: false  # Esto significa que configurarás manualmente en el dashboard de Render
+    autoDeploy: true
